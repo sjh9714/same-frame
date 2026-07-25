@@ -107,7 +107,7 @@ def main() -> int:
          '<meta name="viewport" content="width=device-width,initial-scale=1">',
          "<title>same-frame — five Krea 2 re-render recipes, and where each one stops</title>",
          '<meta name="description" content="Five image-to-image recipes with recorded strengths and seeds, '
-         'each re-tested against a source it was not derived from. Two hold, two partial, one narrow.">',
+         'each re-tested against a source it was not derived from, two of them twice.">',
          f"<style>{CSS}</style></head><body><div class=wrap>"]
 
     L.append("<header>")
@@ -116,8 +116,10 @@ def main() -> int:
              'same size, so "every contour stayed in position" is something you can check rather than '
              'something I assert. Each one was then re-run against an image it was <em>not</em> derived '
              'from — that is the tier badge.</p>')
-    L.append(f'<p class=meta>5 recipes · <b>{n_hold} hold outside their own pair</b> · 2 refusals · '
-             f'3 documented limits · every strength and seed recorded'
+    n_second = sum(1 for r in d["recipes"] if r.get("generalisation", {}).get("second_test"))
+    L.append(f'<p class=meta>{len(d["recipes"])} recipes · <b>{n_hold} hold outside their own pair</b> · '
+             f'{n_second} tested on a third source · {len(d["refusals"])} refusals · '
+             f'{len(d["limits"])} documented limits · every strength and seed recorded'
              f' · <a href="https://github.com/sjh9714/same-frame">github.com/sjh9714/same-frame</a></p>')
     L.append("</header>")
 
@@ -145,6 +147,7 @@ def main() -> int:
         g = r.get("generalisation", {})
         if r["tier"] == "holds" or not g.get("example"):
             continue
+        # fall through to the pair block below
         L.append(pair_block(r["example"][0], g["example"],
                             f"{r['name']} — run on {g['tested_on']}", None, None,
                             [("strength", str(g["strength"])), ("seed", str(g["seed"]))],
@@ -164,6 +167,22 @@ def main() -> int:
                             f"asked for: {ev['asked']}",
                             [("strength", str(ev["strength"])), ("seed", str(ev["seed"]))],
                             notes, bad=True, after_label="what came back"))
+
+    seconds = [(r, r["generalisation"]["second_test"]) for r in d["recipes"]
+               if r.get("generalisation", {}).get("second_test")]
+    if seconds:
+        L.append("<h2>Tested twice</h2>")
+        L.append('<p class=lede>A "use when" drawn from a single failure is a guess wearing the '
+                 'clothes of a measurement. These two were run again on another unrelated source. '
+                 'One held and got sharper; the other turned out to be stated too generously.</p>')
+        for r, t in seconds:
+            L.append(pair_block(r["example"][0], t["example"],
+                                f"{r['name']} — {t['tested_on']}", r["tier"], None,
+                                [("strength", str(t["strength"])), ("seed", str(t["seed"]))],
+                                [("", t["result"]), ("", t["means"])],
+                                bad=(r["tier"] != "conditional"),
+                                before_label="recipe was built on this",
+                                after_label="second unrelated source"))
 
     det = d["determinism"]
     L.append("<h2>Reproducing any of this</h2>")
