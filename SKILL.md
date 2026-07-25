@@ -35,8 +35,14 @@ If a request mixes buckets ("relight this and remove the powerline"), do the buc
 5. Run it:
 
 ```bash
-python3 same_frame.py --image <path-or-url> --recipe <id> --out result.png
+python3 same_frame.py --image <path-or-url> --recipe <id> \
+    --slot <name>="..." --slot <name>="..." \
+    --out result.png
 ```
+
+Pass every slot the recipe declares. The script refuses to run with one missing
+rather than filling it in for you, and it prints which ones it wanted. Add
+`--dry-run` to see the assembled prompt without spending anything.
 
 Or with a prompt you wrote yourself, still inside the band:
 

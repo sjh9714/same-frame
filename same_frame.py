@@ -22,8 +22,14 @@ So this script does two things a plain API wrapper does not:
      a new subject.
 
     python3 same_frame.py --list
-    python3 same_frame.py --image photo.jpg --recipe medium-gouache --out out.png
+    python3 same_frame.py --image photo.jpg --recipe medium-gouache \
+        --slot subject="these terraced fields" --slot contour="terrace contour" \
+        --out out.png
     python3 same_frame.py --image photo.jpg --prompt "..." --strength 0.55 --out out.png
+
+Every recipe has slots and the script will not run without them, so the second
+line above is the short form of what actually works. --list and --dry-run need
+no key and spend nothing.
 
 FAL_KEY comes from a .env file beside this script, or from the environment.
 Roughly $0.008 per megapixel — about eight tenths of a cent for 1024x1024.
