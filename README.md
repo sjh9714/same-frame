@@ -8,8 +8,11 @@
 
 **Geometry is locked. Material is not.**
 
-An agent skill for Claude Code and Codex.
-**5 Krea 2 re-render recipes · 2 hold outside their own pair · 2 partial · 1 narrow · 2 refusals · every strength and seed recorded**
+**5 Krea 2 image-to-image recipes · every strength and seed recorded · each re-run against a source it was not derived from, and the tier is that result**
+
+2 hold · 1 conditional · 1 partial · 1 narrow · 2 refusals with the evidence
+
+Run it as a one-line script, or drop it in as an agent skill for Claude Code and Codex.
 
 [English](README.md) | [中文](README_ZH.md) · [**Before/after gallery →**](https://sjh9714.github.io/same-frame/)
 
