@@ -130,8 +130,11 @@ def main() -> int:
             notes.append(("", f"Outside its own pair, on {g['tested_on']}: {g['held']}"))
         if g.get("drifted"):
             notes.append(("warn", g["drifted"]))
+        # Show the prompt that actually made this pair, not the slotted template.
+        # A reader looking at two images wants the text that produced the one on
+        # the right; {subject} is for the tool, not for them.
         L.append(pair_block(r["example"][0], r["example"][1], r["name"], r["tier"],
-                            r["prompt"],
+                            r.get("example_prompt") or r["prompt"],
                             [("strength", str(r["strength"])), ("seed", str(r["seed"]))],
                             notes))
 

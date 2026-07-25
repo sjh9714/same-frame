@@ -45,7 +45,7 @@
       "verified": "Rock placement and horizon held. Shadow direction obeyed.",
       "tier": "partial",
       "generalisation": {
-        "tested_on": "an aerial photograph of wet rice terraces (examples/03-before.webp)",
+        "tested_on": "an aerial photograph of wet rice terraces",
         "seed": 232270180,
         "strength": 0.55,
         "held": "Every terrace contour stayed in position and the hard low sun and long shadows arrived exactly as asked.",
@@ -53,7 +53,8 @@
         "example": "examples/limit-relight-material-drift.webp",
         "why": "Hard light forces the model to re-derive how every surface responds, and a surface that read as wet under flat light gets re-rendered as dry under hard light. It was invisible on the coastline this recipe came from because basalt is dry either way.",
         "use_when": "The subject is already a hard, dry material — rock, concrete, metal, brick. Check the material, not just the composition, before you accept the result."
-      }
+      },
+      "example_prompt": "Relight this coastline: replace the flat overcast with hard low-angle late afternoon sun from frame right, casting long shadows across the basalt. Keep the rock placement, horizon line and framing identical."
     },
     {
       "id": "relight-single-source",
@@ -75,7 +76,7 @@
       "verified": "Perspective and vanishing point unchanged. Falloff obeyed.",
       "tier": "narrow",
       "generalisation": {
-        "tested_on": "an outdoor coastline (examples/01-before.webp)",
+        "tested_on": "an outdoor coastline",
         "seed": 1114110846,
         "strength": 0.5,
         "held": "Composition exact; a warm glow did appear at the far horizon.",
@@ -83,7 +84,8 @@
         "example": "examples/limit-single-source-outdoors.webp",
         "why": "One light source at the far end is a physically plausible configuration inside a corridor and not outdoors, where the sky is the light source. The recipe was carrying an assumption about enclosure that the prompt never stated.",
         "use_when": "Interiors, tunnels, corridors — enclosed geometry that can funnel a single source."
-      }
+      },
+      "example_prompt": "Keep this corridor's geometry and perspective exactly. Change only the time and mood: warm amber emergency lighting instead of cold fluorescents, one light source at the far end, everything nearer falling into shadow."
     },
     {
       "id": "medium-gouache",
@@ -103,13 +105,14 @@
       "verified": "Terrace contours held position through a full medium change.",
       "tier": "holds",
       "generalisation": {
-        "tested_on": "an exploded camera diagram, line art (examples/05-before.webp)",
+        "tested_on": "an exploded camera diagram, line art",
         "seed": 1849772451,
         "strength": 0.6,
         "held": "Real gouache — chalky opaque paint, visible brush marks, flat edges — with every component in position and spacing.",
         "example": "examples/ok-gouache-on-diagram.webp",
         "why": "Works in both directions. Going from line art to continuous tone is the model dropping structure, which is easy; the reverse is what fails. See limits.line_art_sources."
-      }
+      },
+      "example_prompt": "Re-render these terraced fields as a gouache painting with visible brush texture and chalky opacity. Every terrace contour stays in exactly the same position; only the medium changes."
     },
     {
       "id": "palette-shift",
@@ -133,14 +136,15 @@
       "note": "Naming three concrete colours works. Naming a mood ('make it moodier') drifts.",
       "tier": "holds",
       "generalisation": {
-        "tested_on": "an overcast coastline photograph (examples/01-before.webp)",
+        "tested_on": "an overcast coastline photograph",
         "seed": 1487593315,
         "strength": 0.55,
         "held": "All three named colours landed — rust orange rock, deep teal water, pale bone sky — with the geometry exact.",
         "drifted": "Mild. On a photograph the phrase 'flat colour field boundary' pulls the result slightly toward illustration. Drop that clause when the source is photographic.",
         "example": "examples/ok-palette-on-photo.webp",
         "why": "Naming three concrete colours gives the model a target it can hit without re-deriving anything about the surfaces."
-      }
+      },
+      "example_prompt": "Recolour this woodblock wave to a dusk palette — deep violet water, salmon sky, warm cream foam. Keep every keyblock outline and flat colour field boundary exactly where it is."
     },
     {
       "id": "medium-cyanotype",
@@ -162,7 +166,7 @@
       "note": "Only works on a source that is already line art — diagrams, exploded views, technical drawings. Run against a photograph it returns a blue-toned photograph, not a blueprint. See limits.line_art_sources.",
       "tier": "narrow",
       "generalisation": {
-        "tested_on": "a coastline photograph (examples/01-before.webp)",
+        "tested_on": "a coastline photograph",
         "seed": 2065751023,
         "strength": 0.6,
         "held": "Every rock held its exact position and the palette went Prussian blue.",
@@ -170,7 +174,8 @@
         "example": "examples/limit-cyanotype-on-photo.webp",
         "why": "Outlines are content a photograph does not contain, and the model will not invent them any more than it will invent an object you asked it to add.",
         "use_when": "The source is already line art."
-      }
+      },
+      "example_prompt": "Re-render this exploded camera diagram as a cyanotype blueprint: white line work on Prussian blue, every component in exactly the same position and spacing."
     }
   ],
   "limits": {
