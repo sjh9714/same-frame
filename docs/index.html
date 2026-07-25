@@ -1,0 +1,161 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>same-frame — five Krea 2 re-render recipes, and where each one stops</title>
+<meta name="description" content="Five image-to-image recipes with recorded strengths and seeds, each re-tested against a source it was not derived from. Two hold, two partial, one narrow.">
+<style>
+:root{--bg:#faf9f7;--fg:#17191a;--mut:#6a6f70;--line:#e0dedb;--acc:#1f5d4c;--bad:#9e2b25;--card:#fff}
+@media(prefers-color-scheme:dark){:root{--bg:#111312;--fg:#e9ebe6;--mut:#8b918c;--line:#2a2e2b;--acc:#62bfa1;--bad:#e0776c;--card:#181b19}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo",Roboto,sans-serif}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px 96px}
+header{border-bottom:2px solid var(--fg);padding:56px 0 22px;margin-bottom:40px}
+h1{font-size:clamp(1.8rem,4vw,2.5rem);margin:0 0 10px;letter-spacing:-.02em}
+.sub{color:var(--mut);max-width:64ch;margin:0}
+.meta{margin-top:18px;font:13px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mut)}
+.meta b{color:var(--fg)}
+h2{font-size:1.3rem;margin:56px 0 4px;letter-spacing:-.01em}
+h2:first-of-type{margin-top:0}
+.lede{color:var(--mut);margin:0 0 24px;max-width:72ch;font-size:.94rem}
+.pair{background:var(--card);border:1px solid var(--line);border-radius:7px;overflow:hidden;margin:0 0 26px}
+.pair .imgs{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line)}
+.pair figure{margin:0;position:relative;background:var(--bg)}
+.pair img{width:100%;display:block;aspect-ratio:1;object-fit:cover}
+.tag{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.72);color:#fff;font:11px/1 ui-monospace,monospace;padding:5px 7px;border-radius:3px;letter-spacing:.04em}
+.body{padding:16px 18px 18px}
+.name{font-weight:660;font-size:1rem;margin-bottom:2px}
+.tier{display:inline-block;font:11px ui-monospace,monospace;padding:2px 7px;border-radius:99px;border:1px solid var(--line);color:var(--mut);margin-left:8px;vertical-align:2px}
+.tier.holds{color:var(--acc);border-color:var(--acc)}
+.tier.narrow,.tier.partial{color:var(--bad);border-color:var(--bad)}
+pre{margin:10px 0 0;background:transparent;color:var(--mut);font:11.5px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;word-break:break-word}
+.k{margin-top:10px;font:11.5px/1.7 ui-monospace,monospace;color:var(--mut)}
+.k b{color:var(--fg);font-weight:600}
+.note{margin-top:10px;padding-left:12px;border-left:2px solid var(--line);color:var(--mut);font-size:.9rem}
+.note.warn{border-color:var(--bad)}
+.pair.bad{border-color:var(--bad)}
+.pair.bad .name{color:var(--bad)}
+a{color:var(--acc)}
+footer{margin-top:76px;padding-top:22px;border-top:1px solid var(--line);color:var(--mut);font-size:.9rem;max-width:74ch}
+@media(max-width:640px){.pair .imgs{grid-template-columns:1fr}}
+</style></head><body><div class=wrap>
+<header>
+<h1>Geometry is locked. Material is not.</h1>
+<p class=sub>Five Krea 2 image-to-image recipes, side by side with their sources at the same size, so "every contour stayed in position" is something you can check rather than something I assert. Each one was then re-run against an image it was <em>not</em> derived from — that is the tier badge.</p>
+<p class=meta>5 recipes · <b>2 hold outside their own pair</b> · 2 refusals · 3 documented limits · every strength and seed recorded · <a href="https://github.com/sjh9714/same-frame">github.com/sjh9714/same-frame</a></p>
+</header>
+<h2>The recipes</h2>
+<p class=lede>Every recipe was derived from one image pair. A recipe that only works on the pair it came from is a screenshot, not a recipe, so each was re-run against a source it was not derived from. Two held, two came back partial, one failed. The tiers below are that result, not an estimate.</p>
+<div class="pair">
+<div class=imgs>
+<figure><img loading=lazy src="examples/01-before.webp" alt="source"><span class=tag>source</span></figure>
+<figure><img loading=lazy src="examples/01-after.webp" alt="result"><span class=tag>result</span></figure>
+</div><div class=body>
+<div class=name>Relight: overcast to hard low sun<span class="tier partial">partial</span></div>
+<pre>Relight this {subject}: replace the flat overcast with hard low-angle late afternoon sun from frame right, casting long shadows across the {surface}. Keep the {landmark} placement, horizon line and framing identical.</pre>
+<div class=k><b>strength</b> 0.55 · <b>seed</b> 364022812</div>
+<div class="note ">Outside its own pair, on an aerial photograph of wet rice terraces (examples/03-before.webp): Every terrace contour stayed in position and the hard low sun and long shadows arrived exactly as asked.</div>
+<div class="note warn">The material changed. Wet paddies and vegetation came back as dry stone amphitheatre steps — the water is gone.</div>
+</div></div>
+<div class="pair">
+<div class=imgs>
+<figure><img loading=lazy src="examples/02-before.webp" alt="source"><span class=tag>source</span></figure>
+<figure><img loading=lazy src="examples/02-after.webp" alt="result"><span class=tag>result</span></figure>
+</div><div class=body>
+<div class=name>Relight: one light source, everything else into shadow<span class="tier narrow">narrow</span></div>
+<pre>Keep this {subject}&#x27;s geometry and perspective exactly. Change only the time and mood: {new_light} instead of {old_light}, one light source at {where}, everything nearer falling into shadow.</pre>
+<div class=k><b>strength</b> 0.5 · <b>seed</b> 1459264371</div>
+<div class="note ">Outside its own pair, on an outdoor coastline (examples/01-before.webp): Composition exact; a warm glow did appear at the far horizon.</div>
+<div class="note warn">The instruction barely landed. &#x27;Everything nearer falling into shadow&#x27; did not happen — the foreground stayed evenly lit and the scene is still overcast.</div>
+</div></div>
+<div class="pair">
+<div class=imgs>
+<figure><img loading=lazy src="examples/03-before.webp" alt="source"><span class=tag>source</span></figure>
+<figure><img loading=lazy src="examples/03-after.webp" alt="result"><span class=tag>result</span></figure>
+</div><div class=body>
+<div class=name>Medium: photograph to gouache painting<span class="tier holds">holds</span></div>
+<pre>Re-render {subject} as a gouache painting with visible brush texture and chalky opacity. Every {contour} stays in exactly the same position; only the medium changes.</pre>
+<div class=k><b>strength</b> 0.6 · <b>seed</b> 583476278</div>
+<div class="note ">Outside its own pair, on an exploded camera diagram, line art (examples/05-before.webp): Real gouache — chalky opaque paint, visible brush marks, flat edges — with every component in position and spacing.</div>
+</div></div>
+<div class="pair">
+<div class=imgs>
+<figure><img loading=lazy src="examples/04-before.webp" alt="source"><span class=tag>source</span></figure>
+<figure><img loading=lazy src="examples/04-after.webp" alt="result"><span class=tag>result</span></figure>
+</div><div class=body>
+<div class=name>Palette: recolour without moving a line<span class="tier holds">holds</span></div>
+<pre>Recolour this {subject} to a {palette_name} palette — {colour_1}, {colour_2}, {colour_3}. Keep every outline and flat colour field boundary exactly where it is.</pre>
+<div class=k><b>strength</b> 0.55 · <b>seed</b> 2083277726</div>
+<div class="note ">Outside its own pair, on an overcast coastline photograph (examples/01-before.webp): All three named colours landed — rust orange rock, deep teal water, pale bone sky — with the geometry exact.</div>
+<div class="note warn">Mild. On a photograph the phrase &#x27;flat colour field boundary&#x27; pulls the result slightly toward illustration. Drop that clause when the source is photographic.</div>
+</div></div>
+<div class="pair">
+<div class=imgs>
+<figure><img loading=lazy src="examples/05-before.webp" alt="source"><span class=tag>source</span></figure>
+<figure><img loading=lazy src="examples/05-after.webp" alt="result"><span class=tag>result</span></figure>
+</div><div class=body>
+<div class=name>Medium: render to cyanotype blueprint<span class="tier narrow">narrow</span></div>
+<pre>Re-render this {subject} as a cyanotype blueprint: white line work on Prussian blue, every {part} in exactly the same position and spacing.</pre>
+<div class=k><b>strength</b> 0.6 · <b>seed</b> 1652457598</div>
+<div class="note ">Outside its own pair, on a coastline photograph (examples/01-before.webp): Every rock held its exact position and the palette went Prussian blue.</div>
+<div class="note warn">No line work at all. The result is a blue-toned photograph, not a blueprint.</div>
+</div></div>
+<h2>What the tier means, in images</h2>
+<p class=lede>The composition is right in all three of these. That is the trap — a result can be geometrically perfect and still not be what was asked for.</p>
+<div class="pair bad">
+<div class=imgs>
+<figure><img loading=lazy src="examples/01-before.webp" alt="recipe was built on this"><span class=tag>recipe was built on this</span></figure>
+<figure><img loading=lazy src="examples/limit-relight-material-drift.webp" alt="run on something else"><span class=tag>run on something else</span></figure>
+</div><div class=body>
+<div class=name>Relight: overcast to hard low sun — run on an aerial photograph of wet rice terraces (examples/03-before.webp)</div>
+<div class=k><b>strength</b> 0.55 · <b>seed</b> 232270180</div>
+<div class="note warn">The material changed. Wet paddies and vegetation came back as dry stone amphitheatre steps — the water is gone.</div>
+<div class="note ">Hard light forces the model to re-derive how every surface responds, and a surface that read as wet under flat light gets re-rendered as dry under hard light. It was invisible on the coastline this recipe came from because basalt is dry either way.</div>
+</div></div>
+<div class="pair bad">
+<div class=imgs>
+<figure><img loading=lazy src="examples/02-before.webp" alt="recipe was built on this"><span class=tag>recipe was built on this</span></figure>
+<figure><img loading=lazy src="examples/limit-single-source-outdoors.webp" alt="run on something else"><span class=tag>run on something else</span></figure>
+</div><div class=body>
+<div class=name>Relight: one light source, everything else into shadow — run on an outdoor coastline (examples/01-before.webp)</div>
+<div class=k><b>strength</b> 0.5 · <b>seed</b> 1114110846</div>
+<div class="note warn">The instruction barely landed. &#x27;Everything nearer falling into shadow&#x27; did not happen — the foreground stayed evenly lit and the scene is still overcast.</div>
+<div class="note ">One light source at the far end is a physically plausible configuration inside a corridor and not outdoors, where the sky is the light source. The recipe was carrying an assumption about enclosure that the prompt never stated.</div>
+</div></div>
+<div class="pair bad">
+<div class=imgs>
+<figure><img loading=lazy src="examples/05-before.webp" alt="recipe was built on this"><span class=tag>recipe was built on this</span></figure>
+<figure><img loading=lazy src="examples/limit-cyanotype-on-photo.webp" alt="run on something else"><span class=tag>run on something else</span></figure>
+</div><div class=body>
+<div class=name>Medium: render to cyanotype blueprint — run on a coastline photograph (examples/01-before.webp)</div>
+<div class=k><b>strength</b> 0.6 · <b>seed</b> 2065751023</div>
+<div class="note warn">No line work at all. The result is a blue-toned photograph, not a blueprint.</div>
+<div class="note ">Outlines are content a photograph does not contain, and the model will not invent them any more than it will invent an object you asked it to add.</div>
+</div></div>
+<h2>The two it refuses</h2>
+<p class=lede>Both were run. Both failed. The skill blocks these before the request is spent and shows you the image below.</p>
+<div class="pair bad">
+<div class=imgs>
+<figure><img loading=lazy src="examples/refuse-removal-before.webp" alt="source"><span class=tag>source</span></figure>
+<figure><img loading=lazy src="examples/refuse-removal-after.webp" alt="what came back"><span class=tag>what came back</span></figure>
+</div><div class=body>
+<div class=name>Krea 2 does not add or remove objects. Refuse and say why.</div>
+<pre>asked for: Remove the steam entirely and let the coffee surface go still and mirror-flat.</pre>
+<div class=k><b>strength</b> 0.5 · <b>seed</b> 1499506316</div>
+<div class="note warn">got: The steam came back.</div>
+<div class="note ">instead: Use an inpainting model with a mask. This is a segmentation problem, not a strength problem.</div>
+</div></div>
+<div class="pair bad">
+<div class=imgs>
+<figure><img loading=lazy src="examples/refuse-identity-before.webp" alt="source"><span class=tag>source</span></figure>
+<figure><img loading=lazy src="examples/refuse-identity-after.webp" alt="what came back"><span class=tag>what came back</span></figure>
+</div><div class=body>
+<div class=name>The same person cannot be carried into a new photograph. Refuse and say why.</div>
+<pre>asked for: The same woman, now lit only by a laptop screen. Same silver crop, same scar, same wire frames. Identity must be unmistakably the same person.</pre>
+<div class=k><b>strength</b> 0.72 · <b>seed</b> 1317515569</div>
+<div class="note warn">got: A new scene with a different person. Only the sweater and the palette carried over.</div>
+<div class="note ">0.45 keeps the face but drags the source composition with it — a three-view studio sheet became the same three views at a harbour. 0.72 gives a genuinely new scene and a different person. There is no value between them that gives you one without the other.</div>
+<div class="note ">instead: Train a LoRA. Prompting cannot do this.</div>
+</div></div>
+<h2>Reproducing any of this</h2>
+<p class=lede>Two runs with the same seed, strength, prompt and input bytes returned images that differed on 0 of 1,048,576 pixels. If a re-run comes back different, the input changed. The usual culprit is a re-encode: feeding a lossy WebP copy of a PNG that an edit was originally made from moved the result by 17.0/255 mean per-pixel — the composition, palette and medium all returned, the brush texture did not. Keep the original file if you intend to re-run. Recording the seed is not enough for image-to-image; the seed and the exact input bytes together are what reproduce a generation.</p>
+<footer>Prompts and code are MIT. The images are Krea 2 Turbo output, produced by the repository owner under the Krea 2 Community License and presented as model output rather than as photographs or human artwork. The safety checker was enabled on every request. Extracted from <a href="https://github.com/sjh9714/awesome-krea-2">awesome-krea-2</a>, where the same generations are catalogued with their failures.</footer>
+</div></body></html>

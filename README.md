@@ -1,8 +1,19 @@
 <h1 align="center">same-frame</h1>
 
-<p align="center"><b>Geometry is locked. Material is not.</b><br>
-Five Krea 2 re-render recipes, each re-run against an image it was not derived from.<br>
-Two held. Two came back partial. One failed. All five are here, with the failures.</p>
+<div align="center">
+
+[![stars](https://img.shields.io/github/stars/sjh9714/same-frame?style=flat&color=1f5d4c)](https://github.com/sjh9714/same-frame/stargazers)
+[![gallery](https://img.shields.io/badge/gallery-before%20%2F%20after-1f5d4c)](https://sjh9714.github.io/same-frame/)
+[![license](https://img.shields.io/badge/license-MIT-1f5d4c)](LICENSE)
+
+**Geometry is locked. Material is not.**
+
+An agent skill for Claude Code and Codex.
+**5 Krea 2 re-render recipes · 2 hold outside their own pair · 2 partial · 1 narrow · 2 refusals · every strength and seed recorded**
+
+[English](README.md) | [中文](README_ZH.md) · [**Before/after gallery →**](https://sjh9714.github.io/same-frame/)
+
+</div>
 
 <p align="center">
 <img src="examples/03-before.webp" width="215" alt="terraced fields, photograph">
@@ -11,7 +22,7 @@ Two held. Two came back partial. One failed. All five are here, with the failure
 <img src="examples/ok-gouache-on-diagram.webp" width="215" alt="the same diagram in gouache">
 </p>
 
-An agent skill for Claude Code and Codex. Every strength value is the one that produced the paired image, not a suggested starting point. The working band is **0.50–0.60** and it is narrower than it looks.
+Every strength value is the one that produced the paired image, not a suggested starting point. The working band is **0.50–0.60** and it is narrower than it looks.
 
 The reason this repo exists in this shape: a recipe that only works on the pair it was derived from is a screenshot of one result, not a recipe. So each of the five was run again against an unrelated source, and **the tier column below is that result rather than an estimate**.
 
