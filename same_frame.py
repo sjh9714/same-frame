@@ -262,6 +262,14 @@ def main() -> int:
         for k, v in slots.items():
             prompt = prompt.replace("{" + k + "}", v)
         strength = args.strength if args.strength is not None else r["strength"]
+        # Not detectable from the file, so it is a warning rather than a block:
+        # asking for line work from a continuous-tone source returns the source
+        # recoloured, with the composition perfectly intact and no lines at all.
+        if r.get("requires_line_art_source"):
+            print(f"note: {r['id']} needs a source that is already line art — diagrams, "
+                  "exploded views, technical drawings.\n"
+                  "      Against a photograph it returns a recoloured photograph with no line "
+                  "work. See limits.line_art_sources.", file=sys.stderr)
     else:
         prompt = args.prompt
         if args.strength is None:

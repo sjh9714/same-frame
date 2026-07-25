@@ -96,9 +96,27 @@
       },
       "example": ["examples/05-before.webp", "examples/05-after.webp"],
       "verified": "Every component held its position and spacing across the medium change.",
-      "note": "Strongest on diagrams and exploded views, where position carries the meaning."
+      "requires_line_art_source": true,
+      "note": "Only works on a source that is already line art — diagrams, exploded views, technical drawings. Run against a photograph it returns a blue-toned photograph, not a blueprint. See limits.line_art_sources."
     }
   ],
+
+  "limits": {
+    "line_art_sources": {
+      "finding": "A medium recipe that asks for a different kind of mark only works if the source already makes that kind of mark.",
+      "tested": {
+        "recipe": "medium-cyanotype",
+        "source": "a photograph of a coastline (examples/01-before.webp)",
+        "strength": 0.6,
+        "seed": 2065751023,
+        "asked": "white line work on Prussian blue, every rock formation in exactly the same position",
+        "got": "Rock positions held exactly and the palette went Prussian blue, but there is no line work anywhere. It is a blue-toned photograph, still continuous-tone.",
+        "example": "examples/limit-cyanotype-on-photo.webp"
+      },
+      "why": "This is the same rule one level down. Gouache transfers onto a photograph because gouache is still continuous tone — the model is changing surface, not structure. Cyanotype needs outlines, and outlines are content the photograph does not contain. The model will not invent them, exactly as it will not invent an object you asked it to add.",
+      "rule_of_thumb": "Continuous-tone to continuous-tone transfers (gouache, oil, pastel, film stock, palette). Anything to line work does not, unless the source is already line work."
+    }
+  },
 
   "refusals": [
     {

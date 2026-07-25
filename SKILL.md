@@ -51,6 +51,10 @@ Two things separate the kept edits from the cut ones.
 
 Concrete beats atmospheric. Three named colours ("deep violet water, salmon sky, warm cream foam") hold. "Make it moodier" does not.
 
+**Check the source can make the marks you are asking for.** A medium change only lands if the source already makes that kind of mark. Gouache transfers onto a photograph because both are continuous tone — the model is changing surface, not structure. `medium-cyanotype` run against a photograph returns a blue-toned photograph with the rocks in exactly the right places and *no line work at all* (`examples/limit-cyanotype-on-photo.webp`, seed 2065751023). Outlines are content a photograph does not contain, and the model will not invent them, for the same reason it will not invent an object you asked it to add.
+
+So: continuous tone → continuous tone works. Anything → line work needs a line-art source. If the user wants a blueprint from a photo, say that up front rather than spending the request.
+
 ## Refusals
 
 These are the whole point of this skill. Say no, show the evidence, name the tool that would work.

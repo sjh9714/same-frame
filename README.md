@@ -81,6 +81,19 @@ Refusing: Krea 2 does not add or remove objects. Refuse and say why.
 
 Both refusals are overridable with `--force`. Being certain about someone else's use case is its own failure mode. The default is the measurement.
 
+## The one that only half works
+
+<img src="examples/01-before.webp" width="150" align="left" hspace="8">
+<img src="examples/limit-cyanotype-on-photo.webp" width="150" align="left" hspace="8">
+
+`medium-cyanotype` against a **photograph**, strength 0.6, seed 2065751023. Every rock held its exact position and the palette went Prussian blue — and there is no line work anywhere. It is a blue-toned photograph, not a blueprint.
+
+This is the same rule one level down. Gouache transfers onto a photograph because gouache is still continuous tone; the model is changing surface, not structure. Outlines are content a photograph does not contain, and the model will not invent them any more than it will invent an object you asked it to add.
+
+<br clear="left">
+
+**Continuous tone → continuous tone works. Anything → line work needs a line-art source.** The script warns before spending the request.
+
 ## Install
 
 **Claude Code**
