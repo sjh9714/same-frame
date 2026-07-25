@@ -110,15 +110,15 @@ Refusing: Krea 2 does not add or remove objects. Refuse and say why.
            not a strength problem.
 ```
 
-Both refusals are overridable with `--force`. Being certain about someone else's use case is its own failure mode. The default is the measurement.
+Both refusals are overridable with `--force`. The default is the measurement.
 
-## The other two limits, with the images
+## The other limits, with the images
 
-**A rule I shipped here has been withdrawn.** This section used to say a cyanotype conversion needs a source that is already line art, on the strength of one failure: `medium-cyanotype` against a coastline photograph (seed 2065751023) held every rock position, went Prussian blue, and produced no line work — a blue-toned photograph, not a blueprint ([`limit-cyanotype-on-photo.webp`](examples/limit-cyanotype-on-photo.webp)).
+**`medium-cyanotype` converts photographs too, and the line-art rule that stood here is withdrawn.** That rule rested on a single failure: a coastline photograph (seed 2065751023) held every rock position, went Prussian blue, and produced no line work — a blue-toned photograph, not a blueprint ([`limit-cyanotype-on-photo.webp`](examples/limit-cyanotype-on-photo.webp)).
 
 Two more runs disprove it. On a line-art mandala (seed 1507257657) it produced a proper blueprint-form cyanotype with every petal in place ([`ok-cyanotype-on-lineart.webp`](examples/ok-cyanotype-on-lineart.webp), from [this source](examples/test-lineart.webp)). On a flat, high-contrast **photograph** (seed 2026012845) it produced a proper *photographic* cyanotype print — paper fibre, uneven chemical staining, wash at the edges — with the face exactly preserved ([`ok-cyanotype-on-portrait.webp`](examples/ok-cyanotype-on-portrait.webp), from [this source](examples/test-highcontrast.webp)). A photograph converts fine.
 
-What is **not** established is why the coastline did not. Contrast was the obvious candidate and it runs the wrong way — the coastline source measures a higher standard deviation (74.7) than the portrait (60.4). The visible difference is that the coastline is a deep atmospheric scene and both successes are flat subjects, but that is one image per side, which is a hypothesis and not a finding. It is recorded as unknown rather than replaced with a second guess.
+What is **not** established is why the coastline did not. Contrast was the obvious candidate and it runs the wrong way — the coastline source measures a higher standard deviation (74.7) than the portrait (60.4). The visible difference is that the coastline is a deep atmospheric scene and both successes are flat subjects, but that is one image per side, which is a hypothesis and not a finding.
 
 Gouache still runs cleanly in both directions, including onto line art — that part was never in doubt.
 
@@ -174,11 +174,11 @@ The endpoint is deterministic: two runs at the same seed, strength, prompt and i
 
 So if a re-run looks different, the input changed. This bites in one specific way — feeding a lossy WebP copy of the PNG an edit was originally made from moved the result by **17.0/255** mean per-pixel. Composition, palette and medium all returned; brush texture did not. Keep the original file. For image-to-image, the seed alone does not reproduce a generation; the seed *and the exact input bytes* do.
 
-## What is not verified
+## Where these numbers stop
 
 The band is a **Krea 2 Turbo** measurement on roughly square images. Whether 0.55 means the same thing on Krea 2 non-turbo, on another model, or at 16:9 is untested — re-measure before carrying the number over.
 
-Each recipe was generalisation-tested against exactly **one** unrelated source. That is enough to separate "works" from "only works on what it came from"; it is not enough to map where a `partial` recipe stops. Five recipes, one out-of-pair run each, is a small n. It is the honest n.
+Each recipe was generalisation-tested against exactly **one** unrelated source. That is enough to separate "works" from "only works on what it came from"; it is not enough to map where a `partial` recipe stops.
 
 ## Where this came from
 

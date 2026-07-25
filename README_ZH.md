@@ -19,13 +19,10 @@
 </div>
 
 <p align="center">
-<img src="examples/02-before.webp" width="192" alt="冷白荧光下的走廊">
-<img src="examples/02-after.webp" width="192" alt="同一条走廊，只由远端一个暖光源照亮">
-<img src="examples/03-before.webp" width="192" alt="梯田照片">
-<img src="examples/03-after.webp" width="192" alt="同一片梯田的水粉画">
+<img src="demo.webp" width="560" alt="三张素材图交叉淡入到各自的重绘版本：梯田变成水粉画、木版画海浪被换成三个指定颜色、相机爆炸图变成蓝晒印相。每一次构图都没有移动。">
 </p>
 
-<p align="center"><sub>同一条走廊，同一个灭点，同样的地砖。同一片梯田，同样的等高线。<br>
+<p align="center"><sub>实际输出，strength 和 seed 都印在每一帧下面。<br>
 <a href="https://sjh9714.github.io/same-frame/">逐对并排查看 →</a></sub></p>
 
 这里每个 strength 都是**实际产出配对图像的那个值**，不是建议起点。可用区间是 **0.50–0.60**，比看上去要窄。
@@ -113,11 +110,17 @@ Refusing: Krea 2 does not add or remove objects. Refuse and say why.
            not a strength problem.
 ```
 
-两个拒绝都可以用 `--force` 越过。对别人的用例过于笃定本身就是一种失败模式，但默认值是实测结果。
+两个拒绝都可以用 `--force` 越过。默认值是实测结果。
 
-## 另外两个限制，附图
+## 另外几个限制，附图
 
-**线稿无法被凭空造出来。** `medium-cyanotype` 跑在照片上（seed 2065751023），每块岩石的位置都保住了，颜色也变成了普鲁士蓝，但**完全没有线稿**——得到的是一张蓝调照片，不是蓝图（[`limit-cyanotype-on-photo.webp`](examples/limit-cyanotype-on-photo.webp)）。轮廓线是照片里不存在的内容，模型不会凭空造出它，就像它不会凭空造出你要求添加的物体一样。连续调 → 连续调可以；任何东西 → 线稿则需要素材本身就是线稿。反方向没问题：水粉跑在线稿爆炸图上是这个仓库里最干净的结果。
+**`medium-cyanotype` 在照片上同样成立，这里原先写的「素材必须是线稿」规则已撤回。** 那条规则只建立在一次失败上：`medium-cyanotype` 跑在海岸照片上（seed 2065751023），每块岩石的位置都保住了，颜色也变成了普鲁士蓝，但完全没有线稿——得到的是一张蓝调照片，不是蓝图（[`limit-cyanotype-on-photo.webp`](examples/limit-cyanotype-on-photo.webp)）。
+
+后来两次运行推翻了它。跑在线稿曼陀罗上（seed 1507257657），得到的是每片花瓣都在原位的标准蓝图式氰版（[`ok-cyanotype-on-lineart.webp`](examples/ok-cyanotype-on-lineart.webp)，[素材](examples/test-lineart.webp)）。跑在一张平面、高对比的**照片**上（seed 2026012845），得到的是一张标准的*照片式*氰版印相——纸纤维、不均匀的药液斑、边缘的水痕——人脸完全保留（[`ok-cyanotype-on-portrait.webp`](examples/ok-cyanotype-on-portrait.webp)，[素材](examples/test-highcontrast.webp)）。照片可以转。
+
+**没有**弄清楚的是海岸那张为什么不行。对比度是最显然的候选，但方向反了——海岸素材的标准差（74.7）比人像（60.4）还高。肉眼可见的差别是海岸是纵深的大气场景，而两次成功的都是平面主体，但这是每边一张图，属于假设而不是结论。这里按「未知」记录。
+
+水粉在两个方向上都干净，包括跑到线稿上——这部分从来没有过疑问。
 
 **重打光只会加光，不会减光。** `relight-single-source` 跑在室外（seed 1114110846），"近处一切落入阴影"完全没有发生（[`limit-single-source-outdoors.webp`](examples/limit-single-source-outdoors.webp)）。再跑一次，这次是带天窗的阁楼工作间（seed 1269377144），只成功了一半：工作灯亮了、角落暗下去了，而**天窗还是原来那么亮**（[`limit-single-source-daylight.webp`](examples/limit-single-source-daylight.webp)）。而且 prompt 写的是一盏灯，出来的是两盏。
 
@@ -127,16 +130,16 @@ Refusing: Krea 2 does not add or remove objects. Refuse and say why.
 
 ## 安装
 
-**Claude Code**
+**作为 agent skill**
 
 ```bash
-git clone https://github.com/sjh9714/same-frame ~/.claude/skills/same-frame
+npx skills add sjh9714/same-frame
 ```
 
-**Codex**
+一条命令同时装进 Claude Code、Codex、Cursor、Gemini CLI 等十几个 agent。也可以自己克隆到 skills 目录：
 
 ```bash
-git clone https://github.com/sjh9714/same-frame ~/.codex/skills/same-frame
+git clone https://github.com/sjh9714/same-frame ~/.claude/skills/same-frame   # 或 ~/.codex/skills/
 ```
 
 **独立使用** —— 除标准库外无任何依赖：
@@ -149,17 +152,19 @@ python3 same_frame.py --list
 
 在 [fal.ai](https://fal.ai/dashboard/keys) 获取密钥。约 **$0.008 每百万像素**——1024×1024 一次编辑大概八毫美元。`.env` 已在 gitignore 里。
 
+**`--list` 和 `--dry-run` 不需要密钥，也不花钱。** 前者列出五个配方及其 tier、前提条件和已知失败方式；后者打印拼好的 prompt。
+
 ## 复现
 
 这个 endpoint 是确定性的：相同 seed、strength、prompt 和输入字节的两次运行，**1,048,576 个像素中有 0 个不同**。
 
 所以如果重跑结果不一样，说明输入变了。这一点会在一个具体的地方咬人——把原本用 PNG 做出来的编辑改喂有损的 WebP 副本，结果偏移了 **17.0/255**（平均每像素）。构图、配色、媒介都回来了，笔触质感没有。请保留原始文件。对 image-to-image 而言，光有 seed 不足以复现一次生成，**seed 加上精确的输入字节**才行。
 
-## 哪些没有验证过
+## 这些数字的适用边界
 
 上述区间是 **Krea 2 Turbo** 在接近正方形图像上的测量结果。0.55 在 Krea 2 non-turbo、别的模型或 16:9 上是否意味着同样的东西，没有测过——请重新测量，不要直接沿用这个数字。
 
-每个配方只在**一张**无关素材上做过泛化测试。这足以区分"能用"和"只在自己来源上能用"，但不足以标出一个 `partial` 配方的边界在哪。五个配方、每个一次跨素材运行，样本量很小。这是诚实的样本量。
+每个配方只在**一张**无关素材上做过泛化测试。这足以区分"能用"和"只在自己来源上能用"，但不足以标出一个 `partial` 配方的边界在哪。
 
 ## 来源
 
