@@ -40,7 +40,7 @@ footer{margin-top:76px;padding-top:22px;border-top:1px solid var(--line);color:v
 <header>
 <h1>Geometry is locked. Material is not.</h1>
 <p class=sub>Five Krea 2 image-to-image recipes, side by side with their sources at the same size, so "every contour stayed in position" is something you can check rather than something I assert. Each one was then re-run against an image it was <em>not</em> derived from — that is the tier badge.</p>
-<p class=meta>5 recipes · <b>2 hold outside their own pair</b> · 2 tested on a third source · 2 refusals · 3 documented limits · every strength and seed recorded · <a href="https://github.com/sjh9714/same-frame">github.com/sjh9714/same-frame</a></p>
+<p class=meta>5 recipes · <b>2 hold outside their own pair</b> · 3 tested on a third source · 2 refusals · 3 documented limits · every strength and seed recorded · <a href="https://github.com/sjh9714/same-frame">github.com/sjh9714/same-frame</a></p>
 </header>
 <h2>The recipes</h2>
 <p class=lede>Every recipe was derived from one image pair. A recipe that only works on the pair it came from is a screenshot, not a recipe, so each was re-run against a source it was not derived from. Two held, two came back partial, one failed. The tiers below are that result, not an estimate. Two of them were then run a second time against another unrelated source, because a use_when inferred from a single failure is a guess wearing the clothes of a measurement. One held and got sharper; the other turned out to be stated too generously and was narrowed.</p>
@@ -92,7 +92,7 @@ footer{margin-top:76px;padding-top:22px;border-top:1px solid var(--line);color:v
 <figure><img loading=lazy src="examples/05-before.webp" alt="source"><span class=tag>source</span></figure>
 <figure><img loading=lazy src="examples/05-after.webp" alt="result"><span class=tag>result</span></figure>
 </div><div class=body>
-<div class=name>Medium: render to cyanotype blueprint<span class="tier narrow">narrow</span></div>
+<div class=name>Medium: render to cyanotype blueprint<span class="tier partial">partial</span></div>
 <pre>Re-render this exploded camera diagram as a cyanotype blueprint: white line work on Prussian blue, every component in exactly the same position and spacing.</pre>
 <div class=k><b>strength</b> 0.6 · <b>seed</b> 1652457598</div>
 <div class="note ">Outside its own pair, on a coastline photograph: Every rock held its exact position and the palette went Prussian blue.</div>
@@ -176,6 +176,16 @@ footer{margin-top:76px;padding-top:22px;border-top:1px solid var(--line);color:v
 <div class=k><b>strength</b> 0.5 · <b>seed</b> 1269377144</div>
 <div class="note ">Half landed. Warm work lamps came on and the corners fell into shadow, and the skylight stayed exactly as bright as before — the daylight it was told to replace was never removed. It also produced two lamps where the prompt said one.</div>
 <div class="note ">&#x27;Interiors only&#x27; was too generous. The corridor this came from has no competing daylight; an attic does. Switching an existing source off is removing something from the scene, and this model does not remove things — the same rule as the object-removal refusal, one level down. The extra lamp is the numeric-constraint limit showing up a third time.</div>
+</div></div>
+<div class="pair bad">
+<div class=imgs>
+<figure><img loading=lazy src="examples/05-before.webp" alt="recipe was built on this"><span class=tag>recipe was built on this</span></figure>
+<figure><img loading=lazy src="examples/ok-cyanotype-on-portrait.webp" alt="second unrelated source"><span class=tag>second unrelated source</span></figure>
+</div><div class=body>
+<div class=name>Medium: render to cyanotype blueprint — a line-art mandala and, separately, a flat high-contrast portrait<span class="tier partial">partial</span></div>
+<div class=k><b>strength</b> 0.6 · <b>seed</b> 1507257657</div>
+<div class="note ">The mandala came back a genuine blueprint-form cyanotype with every petal in place. The portrait (seed 2026012845) came back a genuine photographic cyanotype print — paper fibre, uneven chemical staining, wash at the edges — with the face exactly preserved.</div>
+<div class="note ">This falsifies the &#x27;needs a line-art source&#x27; rule that was shipped here off a single failure. A photograph can come back as a real cyanotype. What has NOT been established is why the coastline did not: it is the lower-contrast image on the numbers (source std 74.7 against the portrait&#x27;s 60.4, so contrast is not it), and the visible difference is that the coastline is a deep atmospheric scene while both successes are flat subjects. That is one image per side and it is not enough to state as a rule.</div>
 </div></div>
 <h2>Reproducing any of this</h2>
 <p class=lede>Two runs with the same seed, strength, prompt and input bytes returned images that differed on 0 of 1,048,576 pixels. If a re-run comes back different, the input changed. The usual culprit is a re-encode: feeding a lossy WebP copy of a PNG that an edit was originally made from moved the result by 17.0/255 mean per-pixel — the composition, palette and medium all returned, the brush texture did not. Keep the original file if you intend to re-run. Recording the seed is not enough for image-to-image; the seed and the exact input bytes together are what reproduce a generation.</p>

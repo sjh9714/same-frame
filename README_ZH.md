@@ -39,7 +39,7 @@
 | `palette-shift` | **holds** | 换成三个指定颜色 | 0.55 | 任何素材；照片素材请删掉 "flat colour field" 那句 |
 | `relight-hard-sun` | **conditional** | 阴天 → 低角度硬光并投出长影 | 0.55 | 本身就硬且干的材质，已在第二张无关素材上验证 |
 | `relight-single-source` | narrow | 单一暖光源，其余落入阴影 | 0.50 | 没有现存自然光的封闭空间 |
-| `medium-cyanotype` | narrow | → 普鲁士蓝底白线稿 | 0.60 | 只有本身就是线稿的素材 |
+| `medium-cyanotype` | partial | → 蓝晒，蓝图形式或照片形式 | 0.60 | 线稿，以及平面化的照片主体 |
 
 ```bash
 python3 same_frame.py --image photo.jpg --recipe medium-gouache \

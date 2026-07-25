@@ -39,7 +39,7 @@ The reason this repo exists in this shape: a recipe that only works on the pair 
 | `palette-shift` | **holds** | recolour to three named colours | 0.55 | anything; drop the "flat colour field" clause on photos |
 | `relight-hard-sun` | **conditional** | overcast → hard low sun with cast shadows | 0.55 | hard dry materials — tested twice |
 | `relight-single-source` | narrow | one warm source, everything else into shadow | 0.50 | enclosures with no live window |
-| `medium-cyanotype` | narrow | → white line work on Prussian blue | 0.60 | line-art sources only |
+| `medium-cyanotype` | partial | → cyanotype, blueprint or print form | 0.60 | line art and flat photographic subjects |
 
 ```bash
 python3 same_frame.py --image photo.jpg --recipe medium-gouache \
@@ -114,7 +114,13 @@ Both refusals are overridable with `--force`. Being certain about someone else's
 
 ## The other two limits, with the images
 
-**Line work cannot be invented.** `medium-cyanotype` against a photograph (seed 2065751023) held every rock position and went Prussian blue, and produced no line work at all — a blue-toned photograph, not a blueprint ([`limit-cyanotype-on-photo.webp`](examples/limit-cyanotype-on-photo.webp)). Outlines are content a photograph does not contain, and the model will not invent them any more than it will invent an object you asked it to add. Continuous tone → continuous tone works; anything → line work needs a line-art source. It runs fine in the other direction: gouache on a line-art diagram is the cleanest result in this repo.
+**A rule I shipped here has been withdrawn.** This section used to say a cyanotype conversion needs a source that is already line art, on the strength of one failure: `medium-cyanotype` against a coastline photograph (seed 2065751023) held every rock position, went Prussian blue, and produced no line work — a blue-toned photograph, not a blueprint ([`limit-cyanotype-on-photo.webp`](examples/limit-cyanotype-on-photo.webp)).
+
+Two more runs disprove it. On a line-art mandala (seed 1507257657) it produced a proper blueprint-form cyanotype with every petal in place. On a flat, high-contrast **photograph** (seed 2026012845) it produced a proper *photographic* cyanotype print — paper fibre, uneven chemical staining, wash at the edges — with the face exactly preserved ([`ok-cyanotype-on-portrait.webp`](examples/ok-cyanotype-on-portrait.webp)). A photograph converts fine.
+
+What is **not** established is why the coastline did not. Contrast was the obvious candidate and it runs the wrong way — the coastline source measures a higher standard deviation (74.7) than the portrait (60.4). The visible difference is that the coastline is a deep atmospheric scene and both successes are flat subjects, but that is one image per side, which is a hypothesis and not a finding. It is recorded as unknown rather than replaced with a second guess.
+
+Gouache still runs cleanly in both directions, including onto line art — that part was never in doubt.
 
 **Relighting adds light; it does not take light away.** `relight-single-source` outdoors (seed 1114110846) held the composition and *"everything nearer falling into shadow"* did not happen at all ([`limit-single-source-outdoors.webp`](examples/limit-single-source-outdoors.webp)). Run again on an attic workshop with a skylight (seed 1269377144), it got half way: the work lamps came on and the corners went dark, and **the skylight stayed exactly as bright as before** ([`limit-single-source-daylight.webp`](examples/limit-single-source-daylight.webp)). It also produced two lamps where the prompt said one.
 
