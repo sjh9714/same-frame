@@ -16,11 +16,14 @@
 </div>
 
 <p align="center">
+<img src="examples/02-before.webp" width="215" alt="冷白荧光下的走廊">
+<img src="examples/02-after.webp" width="215" alt="同一条走廊，只由远端一个暖光源照亮">
 <img src="examples/03-before.webp" width="215" alt="梯田照片">
 <img src="examples/03-after.webp" width="215" alt="同一片梯田的水粉画">
-<img src="examples/05-before.webp" width="215" alt="相机爆炸图">
-<img src="examples/ok-gouache-on-diagram.webp" width="215" alt="同一张爆炸图的水粉版本">
 </p>
+
+<p align="center"><sub>同一条走廊，同一个灭点，同样的地砖。同一片梯田，同样的等高线。<br>
+<a href="https://sjh9714.github.io/same-frame/">逐对并排查看 →</a></sub></p>
 
 这里每个 strength 都是**实际产出配对图像的那个值**，不是建议起点。可用区间是 **0.50–0.60**，比看上去要窄。
 

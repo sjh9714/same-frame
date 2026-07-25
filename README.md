@@ -16,11 +16,14 @@ An agent skill for Claude Code and Codex.
 </div>
 
 <p align="center">
+<img src="examples/02-before.webp" width="215" alt="hospital corridor under cold fluorescent light">
+<img src="examples/02-after.webp" width="215" alt="the same corridor lit by one warm source at the far end">
 <img src="examples/03-before.webp" width="215" alt="terraced fields, photograph">
 <img src="examples/03-after.webp" width="215" alt="the same terraces as a gouache painting">
-<img src="examples/05-before.webp" width="215" alt="exploded camera diagram">
-<img src="examples/ok-gouache-on-diagram.webp" width="215" alt="the same diagram in gouache">
 </p>
+
+<p align="center"><sub>Same corridor, same vanishing point, same tiles. Same terraces, same contours.<br>
+<a href="https://sjh9714.github.io/same-frame/">See every pair edge to edge →</a></sub></p>
 
 Every strength value is the one that produced the paired image, not a suggested starting point. The working band is **0.50–0.60** and it is narrower than it looks.
 
