@@ -19,13 +19,10 @@ Run it as a one-line script, or drop it in as an agent skill for Claude Code and
 </div>
 
 <p align="center">
-<img src="examples/02-before.webp" width="192" alt="hospital corridor under cold fluorescent light">
-<img src="examples/02-after.webp" width="192" alt="the same corridor lit by one warm source at the far end">
-<img src="examples/03-before.webp" width="192" alt="terraced fields, photograph">
-<img src="examples/03-after.webp" width="192" alt="the same terraces as a gouache painting">
+<img src="demo.webp" width="560" alt="Three source images crossfading into their re-rendered versions: terraced fields becoming a gouache painting, a woodblock wave recoloured to three named colours, and an exploded camera diagram rendered as a cyanotype print. In each one the composition does not move.">
 </p>
 
-<p align="center"><sub>Same corridor, same vanishing point, same tiles. Same terraces, same contours.<br>
+<p align="center"><sub>Real output at the strength and seed printed under each frame.<br>
 <a href="https://sjh9714.github.io/same-frame/">See every pair edge to edge →</a></sub></p>
 
 Every strength value is the one that produced the paired image, not a suggested starting point. The working band is **0.50–0.60** and it is narrower than it looks.
@@ -133,16 +130,16 @@ So "interiors only" was too generous, and the real rule is sharper: an existing 
 
 ## Install
 
-**Claude Code**
+**As an agent skill**
 
 ```bash
-git clone https://github.com/sjh9714/same-frame ~/.claude/skills/same-frame
+npx skills add sjh9714/same-frame
 ```
 
-**Codex**
+Installs for Claude Code, Codex, Cursor, Gemini CLI and a dozen other agents in one go. Or clone it into the skills directory yourself:
 
 ```bash
-git clone https://github.com/sjh9714/same-frame ~/.codex/skills/same-frame
+git clone https://github.com/sjh9714/same-frame ~/.claude/skills/same-frame   # or ~/.codex/skills/
 ```
 
 **Standalone** — no dependencies beyond the standard library:
