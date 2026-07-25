@@ -3,22 +3,28 @@
   "model": "Krea 2 Turbo",
   "endpoint": "fal-ai/krea-2/turbo/image-to-image",
   "provenance": "https://github.com/sjh9714/awesome-krea-2 — 114 generations, 85 kept, all seeds recorded",
-
   "rule": {
-    "holds": "Krea 2 changes how a scene is rendered. It does not change what is in the scene.",
+    "holds": "Geometry is locked. Material is not.",
+    "long": "Krea 2 image-to-image holds composition, position and spacing very reliably, and does not add or remove objects. What it does not hold is what things are made of. Anything that forces the model to re-derive how a surface behaves — hard light, a new medium that needs different marks — can quietly swap the material while every edge stays exactly where it was.",
     "band": "0.50 to 0.60",
     "below": "Under ~0.45 the source composition dominates so hard that the instruction barely lands.",
     "above": "At 0.72 the model is free enough to invent, and what it invents replaces your subject. See refusals.",
-    "measured_on": "5 kept edits and 3 cut ones"
+    "measured_on": "5 kept edits, 3 cut ones, and 5 out-of-pair generalisation runs"
   },
-
+  "generalisation": {
+    "_what": "Every recipe was derived from one image pair. A recipe that only works on the pair it came from is a screenshot, not a recipe, so each was re-run against a source it was not derived from. Two held, two came back partial, one failed. The tiers below are that result, not an estimate.",
+    "tiers": {
+      "holds": "Ran on an unrelated source and did what it says.",
+      "partial": "Composition held and the instruction landed incompletely or dragged something else with it. Usable, with the caveat stated.",
+      "narrow": "Only works on the kind of source it was derived from."
+    }
+  },
   "determinism": {
     "verdict": "deterministic",
     "measured": "Two runs with the same seed, strength, prompt and input bytes returned images that differed on 0 of 1,048,576 pixels.",
     "so": "If a re-run comes back different, the input changed. The usual culprit is a re-encode: feeding a lossy WebP copy of a PNG that an edit was originally made from moved the result by 17.0/255 mean per-pixel — the composition, palette and medium all returned, the brush texture did not.",
     "practical": "Keep the original file if you intend to re-run. Recording the seed is not enough for image-to-image; the seed and the exact input bytes together are what reproduce a generation."
   },
-
   "recipes": [
     {
       "id": "relight-hard-sun",
@@ -32,8 +38,22 @@
         "surface": "what the shadows fall on, e.g. 'basalt'",
         "landmark": "the thing that must not move, e.g. 'rock'"
       },
-      "example": ["examples/01-before.webp", "examples/01-after.webp"],
-      "verified": "Rock placement and horizon held. Shadow direction obeyed."
+      "example": [
+        "examples/01-before.webp",
+        "examples/01-after.webp"
+      ],
+      "verified": "Rock placement and horizon held. Shadow direction obeyed.",
+      "tier": "partial",
+      "generalisation": {
+        "tested_on": "an aerial photograph of wet rice terraces (examples/03-before.webp)",
+        "seed": 232270180,
+        "strength": 0.55,
+        "held": "Every terrace contour stayed in position and the hard low sun and long shadows arrived exactly as asked.",
+        "drifted": "The material changed. Wet paddies and vegetation came back as dry stone amphitheatre steps — the water is gone.",
+        "example": "examples/limit-relight-material-drift.webp",
+        "why": "Hard light forces the model to re-derive how every surface responds, and a surface that read as wet under flat light gets re-rendered as dry under hard light. It was invisible on the coastline this recipe came from because basalt is dry either way.",
+        "use_when": "The subject is already a hard, dry material — rock, concrete, metal, brick. Check the material, not just the composition, before you accept the result."
+      }
     },
     {
       "id": "relight-single-source",
@@ -48,8 +68,22 @@
         "old_light": "e.g. 'cold fluorescents'",
         "where": "e.g. 'the far end'"
       },
-      "example": ["examples/02-before.webp", "examples/02-after.webp"],
-      "verified": "Perspective and vanishing point unchanged. Falloff obeyed."
+      "example": [
+        "examples/02-before.webp",
+        "examples/02-after.webp"
+      ],
+      "verified": "Perspective and vanishing point unchanged. Falloff obeyed.",
+      "tier": "narrow",
+      "generalisation": {
+        "tested_on": "an outdoor coastline (examples/01-before.webp)",
+        "seed": 1114110846,
+        "strength": 0.5,
+        "held": "Composition exact; a warm glow did appear at the far horizon.",
+        "drifted": "The instruction barely landed. 'Everything nearer falling into shadow' did not happen — the foreground stayed evenly lit and the scene is still overcast.",
+        "example": "examples/limit-single-source-outdoors.webp",
+        "why": "One light source at the far end is a physically plausible configuration inside a corridor and not outdoors, where the sky is the light source. The recipe was carrying an assumption about enclosure that the prompt never stated.",
+        "use_when": "Interiors, tunnels, corridors — enclosed geometry that can funnel a single source."
+      }
     },
     {
       "id": "medium-gouache",
@@ -62,8 +96,20 @@
         "subject": "e.g. 'these terraced fields'",
         "contour": "the structure that must survive, e.g. 'terrace contour'"
       },
-      "example": ["examples/03-before.webp", "examples/03-after.webp"],
-      "verified": "Terrace contours held position through a full medium change."
+      "example": [
+        "examples/03-before.webp",
+        "examples/03-after.webp"
+      ],
+      "verified": "Terrace contours held position through a full medium change.",
+      "tier": "holds",
+      "generalisation": {
+        "tested_on": "an exploded camera diagram, line art (examples/05-before.webp)",
+        "seed": 1849772451,
+        "strength": 0.6,
+        "held": "Real gouache — chalky opaque paint, visible brush marks, flat edges — with every component in position and spacing.",
+        "example": "examples/ok-gouache-on-diagram.webp",
+        "why": "Works in both directions. Going from line art to continuous tone is the model dropping structure, which is easy; the reverse is what fails. See limits.line_art_sources."
+      }
     },
     {
       "id": "palette-shift",
@@ -79,9 +125,22 @@
         "colour_2": "e.g. 'salmon sky'",
         "colour_3": "e.g. 'warm cream foam'"
       },
-      "example": ["examples/04-before.webp", "examples/04-after.webp"],
+      "example": [
+        "examples/04-before.webp",
+        "examples/04-after.webp"
+      ],
       "verified": "Every keyblock outline and colour-field boundary stayed put.",
-      "note": "Naming three concrete colours works. Naming a mood ('make it moodier') drifts."
+      "note": "Naming three concrete colours works. Naming a mood ('make it moodier') drifts.",
+      "tier": "holds",
+      "generalisation": {
+        "tested_on": "an overcast coastline photograph (examples/01-before.webp)",
+        "seed": 1487593315,
+        "strength": 0.55,
+        "held": "All three named colours landed — rust orange rock, deep teal water, pale bone sky — with the geometry exact.",
+        "drifted": "Mild. On a photograph the phrase 'flat colour field boundary' pulls the result slightly toward illustration. Drop that clause when the source is photographic.",
+        "example": "examples/ok-palette-on-photo.webp",
+        "why": "Naming three concrete colours gives the model a target it can hit without re-deriving anything about the surfaces."
+      }
     },
     {
       "id": "medium-cyanotype",
@@ -94,13 +153,26 @@
         "subject": "e.g. 'exploded camera diagram'",
         "part": "e.g. 'component'"
       },
-      "example": ["examples/05-before.webp", "examples/05-after.webp"],
+      "example": [
+        "examples/05-before.webp",
+        "examples/05-after.webp"
+      ],
       "verified": "Every component held its position and spacing across the medium change.",
       "requires_line_art_source": true,
-      "note": "Only works on a source that is already line art — diagrams, exploded views, technical drawings. Run against a photograph it returns a blue-toned photograph, not a blueprint. See limits.line_art_sources."
+      "note": "Only works on a source that is already line art — diagrams, exploded views, technical drawings. Run against a photograph it returns a blue-toned photograph, not a blueprint. See limits.line_art_sources.",
+      "tier": "narrow",
+      "generalisation": {
+        "tested_on": "a coastline photograph (examples/01-before.webp)",
+        "seed": 2065751023,
+        "strength": 0.6,
+        "held": "Every rock held its exact position and the palette went Prussian blue.",
+        "drifted": "No line work at all. The result is a blue-toned photograph, not a blueprint.",
+        "example": "examples/limit-cyanotype-on-photo.webp",
+        "why": "Outlines are content a photograph does not contain, and the model will not invent them any more than it will invent an object you asked it to add.",
+        "use_when": "The source is already line art."
+      }
     }
   ],
-
   "limits": {
     "line_art_sources": {
       "finding": "A medium recipe that asks for a different kind of mark only works if the source already makes that kind of mark.",
@@ -115,21 +187,39 @@
       },
       "why": "This is the same rule one level down. Gouache transfers onto a photograph because gouache is still continuous tone — the model is changing surface, not structure. Cyanotype needs outlines, and outlines are content the photograph does not contain. The model will not invent them, exactly as it will not invent an object you asked it to add.",
       "rule_of_thumb": "Continuous-tone to continuous-tone transfers (gouache, oil, pastel, film stock, palette). Anything to line work does not, unless the source is already line work."
+    },
+    "material_drift": {
+      "finding": "Geometry is the thing that holds. Material is not.",
+      "seen_in": [
+        "relight-hard-sun on wet rice terraces returned dry stone with every contour in place"
+      ],
+      "rule_of_thumb": "The more a change forces the model to re-derive how a surface behaves, the more the material moves. Palette and continuous-tone medium changes are safe. Hard relighting is not. Check what things are made of in the output, not just where they are."
     }
   },
-
   "refusals": [
     {
       "id": "no-object-removal",
-      "asks_like": ["remove the", "delete the", "take out the", "get rid of", "erase the",
-                    "add a", "put a", "insert a", "place a"],
+      "asks_like": [
+        "remove the",
+        "delete the",
+        "take out the",
+        "get rid of",
+        "erase the",
+        "add a",
+        "put a",
+        "insert a",
+        "place a"
+      ],
       "verdict": "Krea 2 does not add or remove objects. Refuse and say why.",
       "evidence": {
         "strength": 0.5,
         "seed": 1499506316,
         "asked": "Remove the steam entirely and let the coffee surface go still and mirror-flat.",
         "got": "The steam came back.",
-        "example": ["examples/refuse-removal-before.webp", "examples/refuse-removal-after.webp"]
+        "example": [
+          "examples/refuse-removal-before.webp",
+          "examples/refuse-removal-after.webp"
+        ]
       },
       "also_failed": [
         "Adding snow and sea ice to a coastline returned the same coastline, slightly cooler.",
@@ -139,15 +229,25 @@
     },
     {
       "id": "no-character-consistency",
-      "asks_like": ["same person", "same character", "same face", "consistent character",
-                    "keep her", "keep him", "this character in a different"],
+      "asks_like": [
+        "same person",
+        "same character",
+        "same face",
+        "consistent character",
+        "keep her",
+        "keep him",
+        "this character in a different"
+      ],
       "verdict": "The same person cannot be carried into a new photograph. Refuse and say why.",
       "evidence": {
         "strength": 0.72,
         "seed": 1317515569,
         "asked": "The same woman, now lit only by a laptop screen. Same silver crop, same scar, same wire frames. Identity must be unmistakably the same person.",
         "got": "A new scene with a different person. Only the sweater and the palette carried over.",
-        "example": ["examples/refuse-identity-before.webp", "examples/refuse-identity-after.webp"]
+        "example": [
+          "examples/refuse-identity-before.webp",
+          "examples/refuse-identity-after.webp"
+        ]
       },
       "why_no_setting_works": "0.45 keeps the face but drags the source composition with it — a three-view studio sheet became the same three views at a harbour. 0.72 gives a genuinely new scene and a different person. There is no value between them that gives you one without the other.",
       "instead": "Train a LoRA. Prompting cannot do this."

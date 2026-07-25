@@ -5,7 +5,11 @@ description: Re-render an image the user already has under new light, a new pale
 
 # same-frame
 
-Krea 2 image-to-image changes **how a scene is rendered**. It does not change **what is in the scene**. Every recipe and every refusal below comes from 114 real generations with the seeds recorded.
+**Geometry is locked. Material is not.**
+
+Krea 2 image-to-image holds composition, position and spacing very reliably, and will not add or remove objects. What it does not hold is what things are made of. Anything that forces the model to re-derive how a surface behaves — hard light, a medium that needs different marks — can quietly swap the material while every edge stays exactly where it was.
+
+Every recipe and refusal below comes from real generations with the seeds recorded, and each recipe was re-run against a source it was not derived from. Two of the five only work on the kind of source they came from. Their `tier` says so.
 
 ## Before doing anything: classify the request
 
@@ -25,9 +29,10 @@ If a request mixes buckets ("relight this and remove the powerline"), do the buc
 ## Running a recipe
 
 1. Read `recipes.json`. Pick the recipe whose `changes` field matches the request.
-2. Fill the `slots`. Every slot is there because leaving it vague measurably degraded the result — name the concrete thing that must not move.
-3. Use the recipe's `strength` verbatim. These are not starting points, they are the values that produced the paired image in `examples/`. The working band is 0.50–0.60 and it is narrow.
-4. Run it:
+2. **Check its `tier` against the user's source before running.** `holds` is safe. `partial` and `narrow` carry a `generalisation.use_when` — if the user's image does not match it, say so first. `relight-single-source` on an outdoor photo and `medium-cyanotype` on a photograph both come back looking almost right and missing the thing that was asked for, which is worse than an obvious failure.
+3. Fill the `slots`. Every slot is there because leaving it vague measurably degraded the result — name the concrete thing that must not move.
+4. Use the recipe's `strength` verbatim. These are not starting points, they are the values that produced the paired image in `examples/`. The working band is 0.50–0.60 and it is narrow.
+5. Run it:
 
 ```bash
 python3 same_frame.py --image <path-or-url> --recipe <id> --out result.png
@@ -53,7 +58,15 @@ Concrete beats atmospheric. Three named colours ("deep violet water, salmon sky,
 
 **Check the source can make the marks you are asking for.** A medium change only lands if the source already makes that kind of mark. Gouache transfers onto a photograph because both are continuous tone — the model is changing surface, not structure. `medium-cyanotype` run against a photograph returns a blue-toned photograph with the rocks in exactly the right places and *no line work at all* (`examples/limit-cyanotype-on-photo.webp`, seed 2065751023). Outlines are content a photograph does not contain, and the model will not invent them, for the same reason it will not invent an object you asked it to add.
 
-So: continuous tone → continuous tone works. Anything → line work needs a line-art source. If the user wants a blueprint from a photo, say that up front rather than spending the request.
+So: continuous tone → continuous tone works. Anything → line work needs a line-art source. If the user wants a blueprint from a photo, say that up front rather than spending the request. The reverse direction is fine — gouache on a line-art diagram is the cleanest result in the repo.
+
+**Check the lighting configuration is physically available to the scene.** "One light source at the far end, everything nearer falling into shadow" works in a corridor and does nothing outdoors, where the sky is the light source (`examples/limit-single-source-outdoors.webp`, seed 1114110846). The composition held and the instruction simply did not land.
+
+## After a run, check the material and not just the composition
+
+The composition will almost always be right, and that is the trap. `relight-hard-sun` on wet rice terraces held every contour and returned **dry stone amphitheatre steps** — the water and the vegetation were gone (`examples/limit-relight-material-drift.webp`, seed 232270180).
+
+When you show the user a result, look at what things are made of. If the material moved, say so rather than presenting a correct-looking composition as a success. The higher the demand on surface behaviour — hard light most of all — the more likely this is.
 
 ## Refusals
 

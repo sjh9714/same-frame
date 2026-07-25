@@ -1,32 +1,31 @@
 <h1 align="center">same-frame</h1>
 
-<p align="center">Re-render an image you already have — new light, new palette, new medium — with the composition provably unchanged.<br>
-<b>Five recipes that were measured. Two requests it refuses, with the images proving why.</b></p>
+<p align="center"><b>Geometry is locked. Material is not.</b><br>
+Five Krea 2 re-render recipes, each re-run against an image it was not derived from.<br>
+Two held. Two came back partial. One failed. All five are here, with the failures.</p>
 
 <p align="center">
-<img src="examples/03-before.webp" width="230" alt="terraced fields, photograph">
-<img src="examples/03-after.webp" width="230" alt="the same terraces as a gouache painting">
-<img src="examples/05-before.webp" width="230" alt="exploded camera diagram">
-<img src="examples/05-after.webp" width="230" alt="the same diagram as a cyanotype blueprint">
+<img src="examples/03-before.webp" width="215" alt="terraced fields, photograph">
+<img src="examples/03-after.webp" width="215" alt="the same terraces as a gouache painting">
+<img src="examples/05-before.webp" width="215" alt="exploded camera diagram">
+<img src="examples/ok-gouache-on-diagram.webp" width="215" alt="the same diagram in gouache">
 </p>
 
-An agent skill for Claude Code and Codex, built on one measurement:
+An agent skill for Claude Code and Codex. Every strength value is the one that produced the paired image, not a suggested starting point. The working band is **0.50–0.60** and it is narrower than it looks.
 
-> **Krea 2 changes how a scene is rendered. It does not change what is in the scene.**
-
-Every strength value here is the one that produced the paired image, not a suggested starting point. The working band is **0.50–0.60** and it is narrower than it looks.
+The reason this repo exists in this shape: a recipe that only works on the pair it was derived from is a screenshot of one result, not a recipe. So each of the five was run again against an unrelated source, and **the tier column below is that result rather than an estimate**.
 
 ---
 
-## The five that work
+## The five
 
-| | Recipe | Changes | Strength |
-|---|---|---|---|
-| <img src="examples/01-after.webp" width="120"> | `relight-hard-sun` | overcast → hard low-angle sun, shadows cast on command | 0.55 |
-| <img src="examples/02-after.webp" width="120"> | `relight-single-source` | cold fluorescents → one warm source, everything else into shadow | 0.50 |
-| <img src="examples/03-after.webp" width="120"> | `medium-gouache` | photograph → gouache, every contour holds position | 0.60 |
-| <img src="examples/04-after.webp" width="120"> | `palette-shift` | recolour without moving a single keyblock outline | 0.55 |
-| <img src="examples/05-after.webp" width="120"> | `medium-cyanotype` | diagram → cyanotype blueprint, spacing preserved | 0.60 |
+| Recipe | Tier | Changes | Strength | Holds up on |
+|---|---|---|---|---|
+| `medium-gouache` | **holds** | photograph → gouache, contours in place | 0.60 | anything, both directions |
+| `palette-shift` | **holds** | recolour to three named colours | 0.55 | anything; drop the "flat colour field" clause on photos |
+| `relight-hard-sun` | partial | overcast → hard low sun with cast shadows | 0.55 | hard dry materials — rock, concrete, metal |
+| `relight-single-source` | narrow | one warm source, everything else into shadow | 0.50 | interiors only |
+| `medium-cyanotype` | narrow | → white line work on Prussian blue | 0.60 | line-art sources only |
 
 ```bash
 python3 same_frame.py --image photo.jpg --recipe medium-gouache \
@@ -34,9 +33,27 @@ python3 same_frame.py --image photo.jpg --recipe medium-gouache \
   --out out.png
 ```
 
-The slots are not decoration. Every kept edit named the thing that must not move, in the prompt, explicitly — *"every terrace contour stays in exactly the same position"*, *"the rock placement, horizon line and framing identical"*. Vague sources drifted, so the script will not run a recipe with an unfilled slot.
+The slots are not decoration. Every kept edit named the thing that must not move, in the prompt, explicitly — *"every terrace contour stays in exactly the same position"*, *"the rock placement, horizon line and framing identical"*. Vague sources drifted, so the script will not run a recipe with an unfilled slot. It also warns you before spending a request on a `partial` or `narrow` recipe.
 
-## The two it refuses
+## What "material is not locked" means
+
+<table>
+<tr><td width="33%" align="center"><img src="examples/03-before.webp" width="200"><br><sub>wet rice terraces</sub></td>
+<td width="33%" align="center"><img src="examples/limit-relight-material-drift.webp" width="200"><br><sub><b>after relight-hard-sun</b></sub></td>
+<td width="34%">
+
+`relight-hard-sun` on wet rice terraces, strength 0.55, seed 232270180. Every contour stayed in position and the hard low sun and long shadows arrived exactly as asked.
+
+And the paddies became **dry stone amphitheatre steps**. The water is gone. The vegetation is gone.
+
+Hard light forces the model to re-derive how every surface responds, and a surface that reads as wet under flat light gets re-rendered as dry under hard light. It was invisible on the coastline this recipe came from, because basalt is dry either way.
+
+**Check what things are made of in the output, not just where they are.**
+
+</td></tr>
+</table>
+
+## The two it refuses outright
 
 Most prompt collections tell you everything works. These two were run, they failed, and the failures are in this repo.
 
@@ -81,18 +98,11 @@ Refusing: Krea 2 does not add or remove objects. Refuse and say why.
 
 Both refusals are overridable with `--force`. Being certain about someone else's use case is its own failure mode. The default is the measurement.
 
-## The one that only half works
+## The other two limits, with the images
 
-<img src="examples/01-before.webp" width="150" align="left" hspace="8">
-<img src="examples/limit-cyanotype-on-photo.webp" width="150" align="left" hspace="8">
+**Line work cannot be invented.** `medium-cyanotype` against a photograph (seed 2065751023) held every rock position and went Prussian blue, and produced no line work at all — a blue-toned photograph, not a blueprint ([`limit-cyanotype-on-photo.webp`](examples/limit-cyanotype-on-photo.webp)). Outlines are content a photograph does not contain, and the model will not invent them any more than it will invent an object you asked it to add. Continuous tone → continuous tone works; anything → line work needs a line-art source. It runs fine in the other direction: gouache on a line-art diagram is the cleanest result in this repo.
 
-`medium-cyanotype` against a **photograph**, strength 0.6, seed 2065751023. Every rock held its exact position and the palette went Prussian blue — and there is no line work anywhere. It is a blue-toned photograph, not a blueprint.
-
-This is the same rule one level down. Gouache transfers onto a photograph because gouache is still continuous tone; the model is changing surface, not structure. Outlines are content a photograph does not contain, and the model will not invent them any more than it will invent an object you asked it to add.
-
-<br clear="left">
-
-**Continuous tone → continuous tone works. Anything → line work needs a line-art source.** The script warns before spending the request.
+**One light source assumes an enclosure.** `relight-single-source` outdoors (seed 1114110846) held the composition and put a warm glow on the horizon, and *"everything nearer falling into shadow"* simply did not happen ([`limit-single-source-outdoors.webp`](examples/limit-single-source-outdoors.webp)). One source at the far end is physically plausible in a corridor and not under an open sky. The recipe was carrying an assumption about enclosure that its prompt never stated.
 
 ## Install
 
@@ -108,7 +118,7 @@ git clone https://github.com/sjh9714/same-frame ~/.claude/skills/same-frame
 git clone https://github.com/sjh9714/same-frame ~/.codex/skills/same-frame
 ```
 
-**Standalone** — the script has no dependencies beyond the standard library:
+**Standalone** — no dependencies beyond the standard library:
 
 ```bash
 git clone https://github.com/sjh9714/same-frame && cd same-frame
@@ -126,10 +136,12 @@ So if a re-run looks different, the input changed. This bites in one specific wa
 
 ## What is not verified
 
-The band is a **Krea 2 Turbo** measurement, on roughly square images. Whether 0.55 means the same thing on Krea 2 non-turbo, on another model, or at 16:9 is untested — re-measure before carrying the number over. Five recipes and two refusals is a small n; it is the honest n.
+The band is a **Krea 2 Turbo** measurement on roughly square images. Whether 0.55 means the same thing on Krea 2 non-turbo, on another model, or at 16:9 is untested — re-measure before carrying the number over.
+
+Each recipe was generalisation-tested against exactly **one** unrelated source. That is enough to separate "works" from "only works on what it came from"; it is not enough to map where a `partial` recipe stops. Five recipes, one out-of-pair run each, is a small n. It is the honest n.
 
 ## Where this came from
 
-Extracted from [awesome-krea-2](https://github.com/sjh9714/awesome-krea-2) — 114 generations, 85 kept, 29 cut, every seed recorded. The refusals are two of the cuts.
+Extracted from [awesome-krea-2](https://github.com/sjh9714/awesome-krea-2) — 114 generations, 85 kept, 29 cut, every seed recorded. The two refusals are two of the cuts.
 
 MIT for the code and the prompts. The example images are Krea 2 Turbo output, produced under the Krea 2 Community License, presented as model output rather than as photographs or artwork. The safety checker was enabled on every request.

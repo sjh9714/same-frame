@@ -232,8 +232,14 @@ def main() -> int:
         print(f"{data['rule']['holds']}\n")
         print(f"working band {data['rule']['band']} — measured on {data['rule']['measured_on']}\n")
         for r in data["recipes"]:
-            print(f"  {r['id']:22s} strength {r['strength']}  — {r['name']}")
-            print(f"  {'':22s} changes {r['changes']}; slots: {', '.join(r.get('slots', {}))}")
+            print(f"  [{r['tier']:7s}] {r['id']:22s} strength {r['strength']}  — {r['name']}")
+            print(f"  {'':10s} {'':22s} slots: {', '.join(r.get('slots', {}))}")
+            g = r.get("generalisation", {})
+            if g.get("use_when"):
+                print(f"  {'':10s} {'':22s} use when: {g['use_when']}")
+            if g.get("drifted"):
+                print(f"  {'':10s} {'':22s} watch for: {g['drifted']}")
+        print("\ntiers: " + " · ".join(f"{k}={v}" for k, v in data["generalisation"]["tiers"].items()))
         print("\nrefused by default:")
         for r in data["refusals"]:
             print(f"  {r['id']:22s} {r['verdict']}")
@@ -262,14 +268,19 @@ def main() -> int:
         for k, v in slots.items():
             prompt = prompt.replace("{" + k + "}", v)
         strength = args.strength if args.strength is not None else r["strength"]
-        # Not detectable from the file, so it is a warning rather than a block:
-        # asking for line work from a continuous-tone source returns the source
-        # recoloured, with the composition perfectly intact and no lines at all.
-        if r.get("requires_line_art_source"):
-            print(f"note: {r['id']} needs a source that is already line art — diagrams, "
-                  "exploded views, technical drawings.\n"
-                  "      Against a photograph it returns a recoloured photograph with no line "
-                  "work. See limits.line_art_sources.", file=sys.stderr)
+        # Whether a given source suits a given recipe is not detectable from the
+        # file, so this warns rather than blocks. It exists because every recipe
+        # here was re-run against a source it was not derived from, and two of
+        # the five only work on the kind of source they came from.
+        g = r.get("generalisation", {})
+        if r["tier"] != "holds":
+            print(f"note: {r['id']} is tier '{r['tier']}' — "
+                  f"{data['generalisation']['tiers'][r['tier']].lower()}", file=sys.stderr)
+            if g.get("use_when"):
+                print(f"      use when: {g['use_when']}", file=sys.stderr)
+            if g.get("drifted"):
+                print(f"      otherwise: {g['drifted']}", file=sys.stderr)
+            print(f"      evidence:  {g.get('example')}", file=sys.stderr)
     else:
         prompt = args.prompt
         if args.strength is None:
