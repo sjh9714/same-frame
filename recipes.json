@@ -187,10 +187,10 @@
         "seed": 2065751023,
         "strength": 0.6,
         "held": "Every rock held its exact position and the palette went Prussian blue.",
-        "drifted": "No line work at all. The result is a blue-toned photograph, not a blueprint.",
+        "drifted": "On the coastline it produced a blue-toned photograph rather than a cyanotype print. Two later runs on other sources produced proper prints, so this is a source-dependent miss, not a rule.",
         "example": "examples/limit-cyanotype-on-photo.webp",
         "why": "Outlines are content a photograph does not contain, and the model will not invent them any more than it will invent an object you asked it to add.",
-        "use_when": "The source is already line art.",
+        "use_when": "Line art, or a photograph of a flat subject. An atmospheric landscape came back a blue tint rather than a print, and why is not established — check the output for paper texture and an uneven wash before accepting it.",
         "second_test": {
           "tested_on": "a line-art mandala and, separately, a flat high-contrast portrait",
           "seed": 1507257657,
