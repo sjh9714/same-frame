@@ -9,14 +9,15 @@
     "band": "0.50 to 0.60",
     "below": "Under ~0.45 the source composition dominates so hard that the instruction barely lands.",
     "above": "At 0.72 the model is free enough to invent, and what it invents replaces your subject. See refusals.",
-    "measured_on": "5 kept edits, 3 cut ones, and 5 out-of-pair generalisation runs"
+    "measured_on": "5 kept edits, 3 cut ones, 5 out-of-pair generalisation runs, and 2 second-source confirmations"
   },
   "generalisation": {
-    "_what": "Every recipe was derived from one image pair. A recipe that only works on the pair it came from is a screenshot, not a recipe, so each was re-run against a source it was not derived from. Two held, two came back partial, one failed. The tiers below are that result, not an estimate.",
+    "_what": "Every recipe was derived from one image pair. A recipe that only works on the pair it came from is a screenshot, not a recipe, so each was re-run against a source it was not derived from. Two held, two came back partial, one failed. The tiers below are that result, not an estimate. Two of them were then run a second time against another unrelated source, because a use_when inferred from a single failure is a guess wearing the clothes of a measurement. One held and got sharper; the other turned out to be stated too generously and was narrowed.",
     "tiers": {
       "holds": "Ran on an unrelated source and did what it says.",
       "partial": "Composition held and the instruction landed incompletely or dragged something else with it. Usable, with the caveat stated.",
-      "narrow": "Only works on the kind of source it was derived from."
+      "narrow": "Only works on the kind of source it was derived from.",
+      "conditional": "Holds on any source that meets a stated precondition, and that precondition was tested on a second unrelated image rather than inferred from one failure."
     }
   },
   "determinism": {
@@ -43,7 +44,7 @@
         "examples/01-after.webp"
       ],
       "verified": "Rock placement and horizon held. Shadow direction obeyed.",
-      "tier": "partial",
+      "tier": "conditional",
       "generalisation": {
         "tested_on": "an aerial photograph of wet rice terraces",
         "seed": 232270180,
@@ -52,7 +53,15 @@
         "drifted": "The material changed. Wet paddies and vegetation came back as dry stone amphitheatre steps — the water is gone.",
         "example": "examples/limit-relight-material-drift.webp",
         "why": "Hard light forces the model to re-derive how every surface responds, and a surface that read as wet under flat light gets re-rendered as dry under hard light. It was invisible on the coastline this recipe came from because basalt is dry either way.",
-        "use_when": "The subject is already a hard, dry material — rock, concrete, metal, brick. Check the material, not just the composition, before you accept the result."
+        "use_when": "The subject is already a hard, dry material — rock, concrete, metal, brick. Check the material, not just the composition, before you accept the result.",
+        "second_test": {
+          "tested_on": "a board-formed concrete stairwell",
+          "seed": 561284942,
+          "strength": 0.55,
+          "result": "Held completely. Same stairwell, same skylight, same handrail, same treads, and a hard low sun arriving with a clean diagonal shadow edge down the right wall. The concrete did not move.",
+          "example": "examples/ok-relight-on-concrete.webp",
+          "means": "The use_when was a hypothesis drawn from one failure. It is now a tested claim: on a hard dry material this recipe holds, and the wet-terrace drift was about the material, not about the recipe."
+        }
       },
       "example_prompt": "Relight this coastline: replace the flat overcast with hard low-angle late afternoon sun from frame right, casting long shadows across the basalt. Keep the rock placement, horizon line and framing identical."
     },
@@ -83,7 +92,15 @@
         "drifted": "The instruction barely landed. 'Everything nearer falling into shadow' did not happen — the foreground stayed evenly lit and the scene is still overcast.",
         "example": "examples/limit-single-source-outdoors.webp",
         "why": "One light source at the far end is a physically plausible configuration inside a corridor and not outdoors, where the sky is the light source. The recipe was carrying an assumption about enclosure that the prompt never stated.",
-        "use_when": "Interiors, tunnels, corridors — enclosed geometry that can funnel a single source."
+        "use_when": "An enclosure with no competing daylight — corridors, tunnels, windowless rooms. A room with a live window will keep its window.",
+        "second_test": {
+          "tested_on": "an attic workshop with a skylight",
+          "seed": 1269377144,
+          "strength": 0.5,
+          "result": "Half landed. Warm work lamps came on and the corners fell into shadow, and the skylight stayed exactly as bright as before — the daylight it was told to replace was never removed. It also produced two lamps where the prompt said one.",
+          "example": "examples/limit-single-source-daylight.webp",
+          "means": "'Interiors only' was too generous. The corridor this came from has no competing daylight; an attic does. Switching an existing source off is removing something from the scene, and this model does not remove things — the same rule as the object-removal refusal, one level down. The extra lamp is the numeric-constraint limit showing up a third time."
+        }
       },
       "example_prompt": "Keep this corridor's geometry and perspective exactly. Change only the time and mood: warm amber emergency lighting instead of cold fluorescents, one light source at the far end, everything nearer falling into shadow."
     },
@@ -199,6 +216,18 @@
         "relight-hard-sun on wet rice terraces returned dry stone with every contour in place"
       ],
       "rule_of_thumb": "The more a change forces the model to re-derive how a surface behaves, the more the material moves. Palette and continuous-tone medium changes are safe. Hard relighting is not. Check what things are made of in the output, not just where they are."
+    },
+    "cannot_switch_off_an_existing_source": {
+      "finding": "Relighting adds light. It does not take light away.",
+      "tested": {
+        "recipe": "relight-single-source",
+        "seed": 1269377144,
+        "asked": "a single warm work lamp instead of flat daylight from the skylight",
+        "got": "The lamp arrived. The skylight stayed exactly as bright.",
+        "example": "examples/limit-single-source-daylight.webp"
+      },
+      "why": "An existing light source is content. Turning it off is removal, and removal is the thing this model will not do — see the no-object-removal refusal.",
+      "rule_of_thumb": "You can add a source and darken what is away from it. You cannot switch off what is already lit."
     }
   },
   "refusals": [

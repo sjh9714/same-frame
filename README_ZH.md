@@ -37,8 +37,8 @@
 |---|---|---|---|---|
 | `medium-gouache` | **holds** | 照片 → 水粉，轮廓保持原位 | 0.60 | 任何素材，两个方向都行 |
 | `palette-shift` | **holds** | 换成三个指定颜色 | 0.55 | 任何素材；照片素材请删掉 "flat colour field" 那句 |
-| `relight-hard-sun` | partial | 阴天 → 低角度硬光并投出长影 | 0.55 | 本身就硬且干的材质——岩石、混凝土、金属 |
-| `relight-single-source` | narrow | 单一暖光源，其余落入阴影 | 0.50 | 只有室内 |
+| `relight-hard-sun` | **conditional** | 阴天 → 低角度硬光并投出长影 | 0.55 | 本身就硬且干的材质，已在第二张无关素材上验证 |
+| `relight-single-source` | narrow | 单一暖光源，其余落入阴影 | 0.50 | 没有现存自然光的封闭空间 |
 | `medium-cyanotype` | narrow | → 普鲁士蓝底白线稿 | 0.60 | 只有本身就是线稿的素材 |
 
 ```bash
@@ -116,7 +116,11 @@ Refusing: Krea 2 does not add or remove objects. Refuse and say why.
 
 **线稿无法被凭空造出来。** `medium-cyanotype` 跑在照片上（seed 2065751023），每块岩石的位置都保住了，颜色也变成了普鲁士蓝，但**完全没有线稿**——得到的是一张蓝调照片，不是蓝图（[`limit-cyanotype-on-photo.webp`](examples/limit-cyanotype-on-photo.webp)）。轮廓线是照片里不存在的内容，模型不会凭空造出它，就像它不会凭空造出你要求添加的物体一样。连续调 → 连续调可以；任何东西 → 线稿则需要素材本身就是线稿。反方向没问题：水粉跑在线稿爆炸图上是这个仓库里最干净的结果。
 
-**单光源假设了一个封闭空间。** `relight-single-source` 跑在室外（seed 1114110846），构图保住了，地平线上也确实出现了暖光，而"近处一切落入阴影"根本没有发生（[`limit-single-source-outdoors.webp`](examples/limit-single-source-outdoors.webp)）。单一光源位于远端在走廊里是物理上成立的配置，在开阔天空下不是——天空本身就是光源。这个配方一直带着一个它的 prompt 从未写明的封闭空间假设。
+**重打光只会加光，不会减光。** `relight-single-source` 跑在室外（seed 1114110846），"近处一切落入阴影"完全没有发生（[`limit-single-source-outdoors.webp`](examples/limit-single-source-outdoors.webp)）。再跑一次，这次是带天窗的阁楼工作间（seed 1269377144），只成功了一半：工作灯亮了、角落暗下去了，而**天窗还是原来那么亮**（[`limit-single-source-daylight.webp`](examples/limit-single-source-daylight.webp)）。而且 prompt 写的是一盏灯，出来的是两盏。
+
+所以"只有室内"说得太宽。真正的规则更锋利：现存光源是*内容*，把它关掉是*移除*，而移除正是这个模型不会做的事——和拒绝增删物体撞的是同一堵墙，只是低了一层。用在走廊、隧道、无窗房间。有活窗户的房间会保住它的窗户。
+
+**材质那条注意事项现在是验证过的前提条件，不是猜测。** `relight-hard-sun` 原本因为一次失败被标为 partial。跑在清水混凝土楼梯间上（seed 561284942）完全成立——同样的踏面、同样的扶手、同样的天窗，低角度硬光沿右墙投下干净的对角阴影，混凝土仍然是混凝土（[`ok-relight-on-concrete.webp`](examples/ok-relight-on-concrete.webp)）。湿梯田那次漂移是材质的问题，不是配方的问题。
 
 ## 安装
 

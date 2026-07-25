@@ -37,8 +37,8 @@ The reason this repo exists in this shape: a recipe that only works on the pair 
 |---|---|---|---|---|
 | `medium-gouache` | **holds** | photograph → gouache, contours in place | 0.60 | anything, both directions |
 | `palette-shift` | **holds** | recolour to three named colours | 0.55 | anything; drop the "flat colour field" clause on photos |
-| `relight-hard-sun` | partial | overcast → hard low sun with cast shadows | 0.55 | hard dry materials — rock, concrete, metal |
-| `relight-single-source` | narrow | one warm source, everything else into shadow | 0.50 | interiors only |
+| `relight-hard-sun` | **conditional** | overcast → hard low sun with cast shadows | 0.55 | hard dry materials — tested twice |
+| `relight-single-source` | narrow | one warm source, everything else into shadow | 0.50 | enclosures with no live window |
 | `medium-cyanotype` | narrow | → white line work on Prussian blue | 0.60 | line-art sources only |
 
 ```bash
@@ -116,7 +116,11 @@ Both refusals are overridable with `--force`. Being certain about someone else's
 
 **Line work cannot be invented.** `medium-cyanotype` against a photograph (seed 2065751023) held every rock position and went Prussian blue, and produced no line work at all — a blue-toned photograph, not a blueprint ([`limit-cyanotype-on-photo.webp`](examples/limit-cyanotype-on-photo.webp)). Outlines are content a photograph does not contain, and the model will not invent them any more than it will invent an object you asked it to add. Continuous tone → continuous tone works; anything → line work needs a line-art source. It runs fine in the other direction: gouache on a line-art diagram is the cleanest result in this repo.
 
-**One light source assumes an enclosure.** `relight-single-source` outdoors (seed 1114110846) held the composition and put a warm glow on the horizon, and *"everything nearer falling into shadow"* simply did not happen ([`limit-single-source-outdoors.webp`](examples/limit-single-source-outdoors.webp)). One source at the far end is physically plausible in a corridor and not under an open sky. The recipe was carrying an assumption about enclosure that its prompt never stated.
+**Relighting adds light; it does not take light away.** `relight-single-source` outdoors (seed 1114110846) held the composition and *"everything nearer falling into shadow"* did not happen at all ([`limit-single-source-outdoors.webp`](examples/limit-single-source-outdoors.webp)). Run again on an attic workshop with a skylight (seed 1269377144), it got half way: the work lamps came on and the corners went dark, and **the skylight stayed exactly as bright as before** ([`limit-single-source-daylight.webp`](examples/limit-single-source-daylight.webp)). It also produced two lamps where the prompt said one.
+
+So "interiors only" was too generous, and the real rule is sharper: an existing light source is *content*, switching it off is *removal*, and removal is the thing this model will not do — the same wall as the object-removal refusal, one level down. Use it on corridors, tunnels and windowless rooms. A room with a live window keeps its window.
+
+**And the material caveat is now a tested precondition, not a guess.** `relight-hard-sun` was marked partial off a single failure. Run on a board-formed concrete stairwell (seed 561284942) it held completely — same treads, same handrail, same skylight, a hard low sun with a clean diagonal shadow down the right wall, and concrete that stayed concrete ([`ok-relight-on-concrete.webp`](examples/ok-relight-on-concrete.webp)). The wet-terrace drift was about the material, not the recipe.
 
 ## Install
 
