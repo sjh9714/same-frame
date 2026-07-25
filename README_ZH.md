@@ -8,8 +8,11 @@
 
 **几何被锁住，材质没有。**
 
-给 Claude Code 和 Codex 用的 agent skill。
-**5 个 Krea 2 重渲染配方 · 2 个在原始图对之外依然成立 · 2 个部分成立 · 1 个只在同类素材上成立 · 2 个拒绝执行 · 每个 strength 和 seed 都有记录**
+**5 个 Krea 2 图生图配方 · 每个 strength 和 seed 都有记录 · 每个都在并非其出处的素材上重跑过一次，tier 写的就是那次结果**
+
+2 个成立 · 1 个有条件 · 1 个部分成立 · 1 个只在同类素材上成立 · 2 个拒绝执行，附证据
+
+可以当一行命令的脚本用，也可以作为 agent skill 放进 Claude Code 或 Codex。
 
 [English](README.md) | [中文](README_ZH.md) · [**前后对比画廊 →**](https://sjh9714.github.io/same-frame/)
 
