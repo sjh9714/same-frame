@@ -16,10 +16,10 @@
 </div>
 
 <p align="center">
-<img src="examples/02-before.webp" width="215" alt="冷白荧光下的走廊">
-<img src="examples/02-after.webp" width="215" alt="同一条走廊，只由远端一个暖光源照亮">
-<img src="examples/03-before.webp" width="215" alt="梯田照片">
-<img src="examples/03-after.webp" width="215" alt="同一片梯田的水粉画">
+<img src="examples/02-before.webp" width="192" alt="冷白荧光下的走廊">
+<img src="examples/02-after.webp" width="192" alt="同一条走廊，只由远端一个暖光源照亮">
+<img src="examples/03-before.webp" width="192" alt="梯田照片">
+<img src="examples/03-after.webp" width="192" alt="同一片梯田的水粉画">
 </p>
 
 <p align="center"><sub>同一条走廊，同一个灭点，同样的地砖。同一片梯田，同样的等高线。<br>

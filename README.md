@@ -16,10 +16,10 @@ An agent skill for Claude Code and Codex.
 </div>
 
 <p align="center">
-<img src="examples/02-before.webp" width="215" alt="hospital corridor under cold fluorescent light">
-<img src="examples/02-after.webp" width="215" alt="the same corridor lit by one warm source at the far end">
-<img src="examples/03-before.webp" width="215" alt="terraced fields, photograph">
-<img src="examples/03-after.webp" width="215" alt="the same terraces as a gouache painting">
+<img src="examples/02-before.webp" width="192" alt="hospital corridor under cold fluorescent light">
+<img src="examples/02-after.webp" width="192" alt="the same corridor lit by one warm source at the far end">
+<img src="examples/03-before.webp" width="192" alt="terraced fields, photograph">
+<img src="examples/03-after.webp" width="192" alt="the same terraces as a gouache painting">
 </p>
 
 <p align="center"><sub>Same corridor, same vanishing point, same tiles. Same terraces, same contours.<br>
