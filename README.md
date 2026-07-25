@@ -155,6 +155,22 @@ python3 same_frame.py --list
 
 Get a key at [fal.ai](https://fal.ai/dashboard/keys). About **$0.008 per megapixel** — roughly eight tenths of a cent for a 1024×1024 edit. `.env` is gitignored.
 
+**`--list` and `--dry-run` need no key and spend nothing.** The first prints every recipe with its tier, its precondition and its known failure mode; the second prints the assembled prompt.
+
+### Using these without fal.ai
+
+The script is a convenience. **The recipe is the prompt and the strength**, and both are plain text in `recipes.json` — so any Krea 2 image-to-image workflow can run them, local ComfyUI included:
+
+```bash
+python3 same_frame.py --recipe medium-gouache --slot subject="these terraced fields" \
+    --slot contour="terrace contour" --dry-run
+# prints the exact prompt; set denoise/strength to the recipe's value and run it locally
+```
+
+Two things to know before you carry a number over. `strength` here is the fal.ai image-to-image parameter; in a ComfyUI graph the equivalent is the KSampler **denoise** value, and while both are nominally "how much of the source survives", **I have not measured that they are the same scale.** And the whole band was measured on Krea 2 **Turbo**. Treat 0.50–0.60 as the place to start looking for your own band, not as a value to copy.
+
+The parts that do transfer without qualification are the prompt phrasing findings — name what must not move, say the change is the only change, and check the source can make the marks you are asking for. Those are about the model, not the endpoint.
+
 ## Reproducing a result
 
 The endpoint is deterministic: two runs at the same seed, strength, prompt and input bytes came back differing on **0 of 1,048,576 pixels**.

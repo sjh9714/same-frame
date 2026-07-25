@@ -252,8 +252,11 @@ def main() -> int:
             print(f"  {'':22s} instead: {r['instead']}")
         return 0
 
-    if not args.image:
-        ap.error("need --image")
+    # A dry run resolves the prompt and stops, so it has no use for the image.
+    # Requiring one turned the "show me the prompt so I can paste it into my own
+    # workflow" path into a hunt for a file the user did not need.
+    if not args.image and not args.dry_run:
+        ap.error("need --image (or --dry-run, which only resolves the prompt)")
     if bool(args.recipe) == bool(args.prompt):
         ap.error("need exactly one of --recipe or --prompt")
 
