@@ -1,0 +1,138 @@
+{
+  "_what": "Five image-to-image recipes that were run and kept, and two that were run and failed. Every strength value here is the one that actually produced the paired image in examples/, not a suggested starting point. Seeds are recorded so any of these can be reproduced.",
+  "model": "Krea 2 Turbo",
+  "endpoint": "fal-ai/krea-2/turbo/image-to-image",
+  "provenance": "https://github.com/sjh9714/awesome-krea-2 — 114 generations, 85 kept, all seeds recorded",
+
+  "rule": {
+    "holds": "Krea 2 changes how a scene is rendered. It does not change what is in the scene.",
+    "band": "0.50 to 0.60",
+    "below": "Under ~0.45 the source composition dominates so hard that the instruction barely lands.",
+    "above": "At 0.72 the model is free enough to invent, and what it invents replaces your subject. See refusals.",
+    "measured_on": "5 kept edits and 3 cut ones"
+  },
+
+  "determinism": {
+    "verdict": "deterministic",
+    "measured": "Two runs with the same seed, strength, prompt and input bytes returned images that differed on 0 of 1,048,576 pixels.",
+    "so": "If a re-run comes back different, the input changed. The usual culprit is a re-encode: feeding a lossy WebP copy of a PNG that an edit was originally made from moved the result by 17.0/255 mean per-pixel — the composition, palette and medium all returned, the brush texture did not.",
+    "practical": "Keep the original file if you intend to re-run. Recording the seed is not enough for image-to-image; the seed and the exact input bytes together are what reproduce a generation."
+  },
+
+  "recipes": [
+    {
+      "id": "relight-hard-sun",
+      "name": "Relight: overcast to hard low sun",
+      "changes": "light direction and hardness",
+      "strength": 0.55,
+      "seed": 364022812,
+      "prompt": "Relight this {subject}: replace the flat overcast with hard low-angle late afternoon sun from frame right, casting long shadows across the {surface}. Keep the {landmark} placement, horizon line and framing identical.",
+      "slots": {
+        "subject": "what is in the photo, e.g. 'coastline'",
+        "surface": "what the shadows fall on, e.g. 'basalt'",
+        "landmark": "the thing that must not move, e.g. 'rock'"
+      },
+      "example": ["examples/01-before.webp", "examples/01-after.webp"],
+      "verified": "Rock placement and horizon held. Shadow direction obeyed."
+    },
+    {
+      "id": "relight-single-source",
+      "name": "Relight: one light source, everything else into shadow",
+      "changes": "light colour, count of sources, falloff",
+      "strength": 0.5,
+      "seed": 1459264371,
+      "prompt": "Keep this {subject}'s geometry and perspective exactly. Change only the time and mood: {new_light} instead of {old_light}, one light source at {where}, everything nearer falling into shadow.",
+      "slots": {
+        "subject": "e.g. 'corridor'",
+        "new_light": "e.g. 'warm amber emergency lighting'",
+        "old_light": "e.g. 'cold fluorescents'",
+        "where": "e.g. 'the far end'"
+      },
+      "example": ["examples/02-before.webp", "examples/02-after.webp"],
+      "verified": "Perspective and vanishing point unchanged. Falloff obeyed."
+    },
+    {
+      "id": "medium-gouache",
+      "name": "Medium: photograph to gouache painting",
+      "changes": "medium only",
+      "strength": 0.6,
+      "seed": 583476278,
+      "prompt": "Re-render {subject} as a gouache painting with visible brush texture and chalky opacity. Every {contour} stays in exactly the same position; only the medium changes.",
+      "slots": {
+        "subject": "e.g. 'these terraced fields'",
+        "contour": "the structure that must survive, e.g. 'terrace contour'"
+      },
+      "example": ["examples/03-before.webp", "examples/03-after.webp"],
+      "verified": "Terrace contours held position through a full medium change."
+    },
+    {
+      "id": "palette-shift",
+      "name": "Palette: recolour without moving a line",
+      "changes": "colour only",
+      "strength": 0.55,
+      "seed": 2083277726,
+      "prompt": "Recolour this {subject} to a {palette_name} palette — {colour_1}, {colour_2}, {colour_3}. Keep every outline and flat colour field boundary exactly where it is.",
+      "slots": {
+        "subject": "e.g. 'woodblock wave'",
+        "palette_name": "e.g. 'dusk'",
+        "colour_1": "e.g. 'deep violet water'",
+        "colour_2": "e.g. 'salmon sky'",
+        "colour_3": "e.g. 'warm cream foam'"
+      },
+      "example": ["examples/04-before.webp", "examples/04-after.webp"],
+      "verified": "Every keyblock outline and colour-field boundary stayed put.",
+      "note": "Naming three concrete colours works. Naming a mood ('make it moodier') drifts."
+    },
+    {
+      "id": "medium-cyanotype",
+      "name": "Medium: render to cyanotype blueprint",
+      "changes": "medium and colour, structure preserved",
+      "strength": 0.6,
+      "seed": 1652457598,
+      "prompt": "Re-render this {subject} as a cyanotype blueprint: white line work on Prussian blue, every {part} in exactly the same position and spacing.",
+      "slots": {
+        "subject": "e.g. 'exploded camera diagram'",
+        "part": "e.g. 'component'"
+      },
+      "example": ["examples/05-before.webp", "examples/05-after.webp"],
+      "verified": "Every component held its position and spacing across the medium change.",
+      "note": "Strongest on diagrams and exploded views, where position carries the meaning."
+    }
+  ],
+
+  "refusals": [
+    {
+      "id": "no-object-removal",
+      "asks_like": ["remove the", "delete the", "take out the", "get rid of", "erase the",
+                    "add a", "put a", "insert a", "place a"],
+      "verdict": "Krea 2 does not add or remove objects. Refuse and say why.",
+      "evidence": {
+        "strength": 0.5,
+        "seed": 1499506316,
+        "asked": "Remove the steam entirely and let the coffee surface go still and mirror-flat.",
+        "got": "The steam came back.",
+        "example": ["examples/refuse-removal-before.webp", "examples/refuse-removal-after.webp"]
+      },
+      "also_failed": [
+        "Adding snow and sea ice to a coastline returned the same coastline, slightly cooler.",
+        "Darkening a sky returned the same sky."
+      ],
+      "instead": "Use an inpainting model with a mask. This is a segmentation problem, not a strength problem."
+    },
+    {
+      "id": "no-character-consistency",
+      "asks_like": ["same person", "same character", "same face", "consistent character",
+                    "keep her", "keep him", "this character in a different"],
+      "verdict": "The same person cannot be carried into a new photograph. Refuse and say why.",
+      "evidence": {
+        "strength": 0.72,
+        "seed": 1317515569,
+        "asked": "The same woman, now lit only by a laptop screen. Same silver crop, same scar, same wire frames. Identity must be unmistakably the same person.",
+        "got": "A new scene with a different person. Only the sweater and the palette carried over.",
+        "example": ["examples/refuse-identity-before.webp", "examples/refuse-identity-after.webp"]
+      },
+      "why_no_setting_works": "0.45 keeps the face but drags the source composition with it — a three-view studio sheet became the same three views at a harbour. 0.72 gives a genuinely new scene and a different person. There is no value between them that gives you one without the other.",
+      "instead": "Train a LoRA. Prompting cannot do this."
+    }
+  ]
+}
