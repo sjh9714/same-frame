@@ -10,7 +10,7 @@
 
 **5 Krea 2 image-to-image recipes · every strength and seed recorded · each re-run against a source it was not derived from, and the tier is that result**
 
-2 hold · 1 conditional · 1 partial · 1 narrow · 2 refusals with the evidence
+1 holds · 1 conditional · 2 partial · 1 narrow · 2 refusals with the evidence
 
 Run it as a one-line script, or drop it in as an agent skill for Claude Code and Codex.
 
@@ -35,8 +35,8 @@ The reason this repo exists in this shape: a recipe that only works on the pair 
 
 | Recipe | Tier | Changes | Strength | Holds up on |
 |---|---|---|---|---|
-| `medium-gouache` | **holds** | photograph → gouache, contours in place | 0.60 | anything, both directions |
-| `palette-shift` | **holds** | recolour to three named colours | 0.55 | anything; drop the "flat colour field" clause on photos |
+| `medium-gouache` | partial | photograph → gouache, contours in place | 0.60 | subjects, not people — see below |
+| `palette-shift` | **holds** | recolour to three named colours | 0.55 | anything, characters included; drop the "flat colour field" clause on photos |
 | `relight-hard-sun` | **conditional** | overcast → hard low sun with cast shadows | 0.55 | hard dry materials — tested twice |
 | `relight-single-source` | narrow | one warm source, everything else into shadow | 0.50 | enclosures with no live window |
 | `medium-cyanotype` | partial | → cyanotype, blueprint or print form | 0.60 | line art and flat photographic subjects |
@@ -113,6 +113,19 @@ Refusing: Krea 2 does not add or remove objects. Refuse and say why.
 Both refusals are overridable with `--force`. The default is the measurement.
 
 ## The other limits, with the images
+
+**Gouache holds on a subject and not on a person, and I only found that because I went looking.** This recipe was tiered `holds` on the strength of two out-of-pair runs: a photograph of terraced fields and a line-art camera diagram. Neither of those is *someone*.
+
+<img src="examples/test-anime.webp" width="200"> <img src="examples/limit-gouache-on-character.webp" width="200"> <img src="examples/ok-palette-on-character.webp" width="200">
+
+Run on a cel-shaded illustration of a character (seed 1604078924, strength 0.60) it returns real gouache — chalky paint, visible brush marks, a painted sky — and keeps the pose, the rooftop and the skyline. It also turns dark brown hair blonde, removes the red scarf, replaces the long coat with a different garment and changes the boots. The medium change is correct and **the person is not the same person**.
+
+That is consistent with the refusal two sections up: identity does not survive image-to-image here. On terraces and a camera diagram there is no identity to lose, so the recipe looked unconditional. It is not.
+
+`palette-shift` run on the same source (seed 382435430, strength 0.55) keeps the face, the pose, the coat and the scarf and recolours exactly as asked, so this is specific to re-rendering the marks rather than to characters in general.
+
+Practical rule: gouache on a still life, a landscape, a diagram — fine. Gouache on a character you want to stay recognisable — no.
+
 
 **`medium-cyanotype` converts photographs too, and the line-art rule that stood here is withdrawn.** That rule rested on a single failure: a coastline photograph (seed 2065751023) held every rock position, went Prussian blue, and produced no line work — a blue-toned photograph, not a blueprint ([`limit-cyanotype-on-photo.webp`](examples/limit-cyanotype-on-photo.webp)).
 

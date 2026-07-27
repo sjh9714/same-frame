@@ -120,14 +120,16 @@
         "examples/03-after.webp"
       ],
       "verified": "Terrace contours held position through a full medium change.",
-      "tier": "holds",
+      "tier": "partial",
       "generalisation": {
         "tested_on": "an exploded camera diagram, line art",
         "seed": 1849772451,
         "strength": 0.6,
         "held": "Real gouache — chalky opaque paint, visible brush marks, flat edges — with every component in position and spacing.",
         "example": "examples/ok-gouache-on-diagram.webp",
-        "why": "Works in both directions. Going from line art to continuous tone is the model dropping structure, which is easy; the reverse is what fails. See limits.line_art_sources."
+        "why": "Works in both directions. Going from line art to continuous tone is the model dropping structure, which is easy; the reverse is what fails. See limits.line_art_sources.",
+        "use_when": "The source has no identity to preserve. It held on a photograph of terraced fields and on a line-art camera diagram, and both of those are subjects, not someone. On a character illustration the medium lands and the character does not survive it.",
+        "drifted": "On a cel-shaded anime illustration (seed 1604078924, strength 0.60) the pose, the rooftop and the skyline held and it came back as real gouache - but the hair went from dark brown to blonde, the red scarf vanished, the long coat became a different garment and the boots changed. The medium change was correct and the person was not (examples/limit-gouache-on-character.webp)."
       },
       "example_prompt": "Re-render these terraced fields as a gouache painting with visible brush texture and chalky opacity. Every terrace contour stays in exactly the same position; only the medium changes."
     },
@@ -159,7 +161,8 @@
         "held": "All three named colours landed — rust orange rock, deep teal water, pale bone sky — with the geometry exact.",
         "drifted": "Mild. On a photograph the phrase 'flat colour field boundary' pulls the result slightly toward illustration. Drop that clause when the source is photographic.",
         "example": "examples/ok-palette-on-photo.webp",
-        "why": "Naming three concrete colours gives the model a target it can hit without re-deriving anything about the surfaces."
+        "why": "Naming three concrete colours gives the model a target it can hit without re-deriving anything about the surfaces.",
+        "also_held_on": "A cel-shaded anime illustration (seed 382435430, strength 0.55): same face, same pose, same coat, recoloured to the three named colours (examples/ok-palette-on-character.webp). Palette shift survives a character where gouache does not."
       },
       "example_prompt": "Recolour this woodblock wave to a dusk palette — deep violet water, salmon sky, warm cream foam. Keep every keyblock outline and flat colour field boundary exactly where it is."
     },

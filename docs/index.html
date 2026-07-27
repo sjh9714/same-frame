@@ -40,7 +40,7 @@ footer{margin-top:76px;padding-top:22px;border-top:1px solid var(--line);color:v
 <header>
 <h1>Geometry is locked. Material is not.</h1>
 <p class=sub>Five Krea 2 image-to-image recipes, side by side with their sources at the same size, so "every contour stayed in position" is something you can check rather than something I assert. Each one was then re-run against an image it was <em>not</em> derived from — that is the tier badge.</p>
-<p class=meta>5 recipes · <b>2 hold outside their own pair</b> · 3 tested on a third source · 2 refusals · 3 documented limits · every strength and seed recorded · <a href="https://github.com/sjh9714/same-frame">github.com/sjh9714/same-frame</a></p>
+<p class=meta>5 recipes · <b>1 hold outside their own pair</b> · 3 tested on a third source · 2 refusals · 3 documented limits · every strength and seed recorded · <a href="https://github.com/sjh9714/same-frame">github.com/sjh9714/same-frame</a></p>
 </header>
 <h2>The recipes</h2>
 <p class=lede>Every recipe was derived from one image pair. A recipe that only works on the pair it came from is a screenshot, not a recipe, so each was re-run against a source it was not derived from. Two held, two came back partial, one failed. The tiers below are that result, not an estimate. Two of them were then run a second time against another unrelated source, because a use_when inferred from a single failure is a guess wearing the clothes of a measurement. One held and got sharper; the other turned out to be stated too generously and was narrowed.</p>
@@ -71,10 +71,11 @@ footer{margin-top:76px;padding-top:22px;border-top:1px solid var(--line);color:v
 <figure><img loading=lazy src="examples/03-before.webp" alt="source"><span class=tag>source</span></figure>
 <figure><img loading=lazy src="examples/03-after.webp" alt="result"><span class=tag>result</span></figure>
 </div><div class=body>
-<div class=name>Medium: photograph to gouache painting<span class="tier holds">holds</span></div>
+<div class=name>Medium: photograph to gouache painting<span class="tier partial">partial</span></div>
 <pre>Re-render these terraced fields as a gouache painting with visible brush texture and chalky opacity. Every terrace contour stays in exactly the same position; only the medium changes.</pre>
 <div class=k><b>strength</b> 0.6 · <b>seed</b> 583476278</div>
 <div class="note ">Outside its own pair, on an exploded camera diagram, line art: Real gouache — chalky opaque paint, visible brush marks, flat edges — with every component in position and spacing.</div>
+<div class="note warn">On a cel-shaded anime illustration (seed 1604078924, strength 0.60) the pose, the rooftop and the skyline held and it came back as real gouache - but the hair went from dark brown to blonde, the red scarf vanished, the long coat became a different garment and the boots changed. The medium change was correct and the person was not (examples/limit-gouache-on-character.webp).</div>
 </div></div>
 <div class="pair">
 <div class=imgs>
@@ -119,6 +120,16 @@ footer{margin-top:76px;padding-top:22px;border-top:1px solid var(--line);color:v
 <div class=k><b>strength</b> 0.5 · <b>seed</b> 1114110846</div>
 <div class="note warn">The instruction barely landed. &#x27;Everything nearer falling into shadow&#x27; did not happen — the foreground stayed evenly lit and the scene is still overcast.</div>
 <div class="note ">One light source at the far end is a physically plausible configuration inside a corridor and not outdoors, where the sky is the light source. The recipe was carrying an assumption about enclosure that the prompt never stated.</div>
+</div></div>
+<div class="pair bad">
+<div class=imgs>
+<figure><img loading=lazy src="examples/03-before.webp" alt="recipe was built on this"><span class=tag>recipe was built on this</span></figure>
+<figure><img loading=lazy src="examples/ok-gouache-on-diagram.webp" alt="run on something else"><span class=tag>run on something else</span></figure>
+</div><div class=body>
+<div class=name>Medium: photograph to gouache painting — run on an exploded camera diagram, line art</div>
+<div class=k><b>strength</b> 0.6 · <b>seed</b> 1849772451</div>
+<div class="note warn">On a cel-shaded anime illustration (seed 1604078924, strength 0.60) the pose, the rooftop and the skyline held and it came back as real gouache - but the hair went from dark brown to blonde, the red scarf vanished, the long coat became a different garment and the boots changed. The medium change was correct and the person was not (examples/limit-gouache-on-character.webp).</div>
+<div class="note ">Works in both directions. Going from line art to continuous tone is the model dropping structure, which is easy; the reverse is what fails. See limits.line_art_sources.</div>
 </div></div>
 <div class="pair bad">
 <div class=imgs>
