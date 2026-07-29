@@ -12,7 +12,7 @@
     "measured_on": "5 kept edits, 3 cut ones, 5 out-of-pair generalisation runs, and 2 second-source confirmations"
   },
   "generalisation": {
-    "_what": "Every recipe was derived from one image pair. A recipe that only works on the pair it came from is a screenshot, not a recipe, so each was re-run against a source it was not derived from. Two held, two came back partial, one failed. The tiers below are that result, not an estimate. Two of them were then run a second time against another unrelated source, because a use_when inferred from a single failure is a guess wearing the clothes of a measurement. One held and got sharper; the other turned out to be stated too generously and was narrowed.",
+    "_what": "Every recipe was derived from one image pair. A recipe that only works on the pair it came from is a screenshot, not a recipe, so each was re-run against a source it was not derived from. One held on anything, one held only under a stated condition, two came back partial and one is narrow. medium-gouache was in the first group until 2026-07-27, when running it on a cel-shaded character held the pose and the setting and quietly replaced the person; it is partial now. The tiers below are that result, not an estimate. Two of them were then run a second time against another unrelated source, because a use_when inferred from a single failure is a guess wearing the clothes of a measurement. One held and got sharper; the other turned out to be stated too generously and was narrowed.",
     "tiers": {
       "holds": "Ran on an unrelated source and did what it says.",
       "partial": "Composition held and the instruction landed incompletely or dragged something else with it. Usable, with the caveat stated.",
