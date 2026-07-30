@@ -8,9 +8,9 @@
 
 **Geometry is locked. Material is not.**
 
-**5 Krea 2 image-to-image recipes · every strength and seed recorded · each re-run against a source it was not derived from, and the tier is that result**
+**5 Krea 2 image-to-image recipes · every strength and seed is the one that produced the image below it**
 
-1 holds · 1 conditional · 2 partial · 1 narrow · 2 refusals with the evidence
+Each was re-run on a source it was not derived from, and where it broke there is a picture of it breaking. Two requests it refuses outright, citing the run that already failed.
 
 Run it as a one-line script, or drop it in as an agent skill for Claude Code and Codex.
 
